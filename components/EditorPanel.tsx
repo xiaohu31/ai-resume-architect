@@ -1,7 +1,6 @@
-
 import React, { useState } from 'react';
 import { useResumeStore } from '../store';
-import { Plus, Trash2, ChevronDown, ChevronUp, GripVertical, AlertCircle, Calendar, ChevronLeft, ChevronRight, Settings, Sparkles, Wand2, Palette, FileCheck } from 'lucide-react';
+import { Plus, Trash2, ChevronDown, ChevronUp, GripVertical, Calendar, ChevronLeft, ChevronRight, Settings, Sparkles, Wand2, Palette, FileCheck } from 'lucide-react';
 import {
   DndContext,
   closestCenter,
@@ -19,6 +18,7 @@ import {
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
+import FieldAIAssistant from './FieldAIAssistant';
 
 // --- MonthPicker Component ---
 interface MonthPickerProps {
@@ -151,31 +151,30 @@ const SortableItem = ({
   const renderField = (field: string, label: string, placeholder: string, type: 'text' | 'textarea' = 'text') => {
     const value = item.fields[field] || '';
 
+    if (type === 'textarea') {
+      return (
+        <FieldAIAssistant 
+          key={field}
+          label={label}
+          placeholder={placeholder}
+          value={value}
+          blockId={activeBlock.id}
+          itemId={item.id}
+          field={field}
+          onApply={(val) => updateBlockItemField(activeBlock.id, item.id, field, val)}
+        />
+      );
+    }
+
     return (
       <div key={field} className="mb-4">
         <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 px-1">{label}</label>
-        {type === 'text' ? (
-          <input 
-            className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600"
-            value={value}
-            placeholder={placeholder}
-            data-block={activeBlock.id}
-            data-item={item.id}
-            data-field={field}
-            onChange={(e) => updateBlockItemField(activeBlock.id, item.id, field, e.target.value)}
-          />
-        ) : (
-          <textarea 
-            rows={4}
-            className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 resize-none font-sans leading-relaxed"
-            value={value}
-            placeholder={placeholder}
-            data-block={activeBlock.id}
-            data-item={item.id}
-            data-field={field}
-            onChange={(e) => updateBlockItemField(activeBlock.id, item.id, field, e.target.value)}
-          />
-        )}
+        <input 
+          className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 text-zinc-200"
+          value={value}
+          placeholder={placeholder}
+          onChange={(e) => updateBlockItemField(activeBlock.id, item.id, field, e.target.value)}
+        />
       </div>
     );
   };
@@ -295,9 +294,7 @@ const EditorPanel: React.FC = () => {
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
-      activationConstraint: {
-        distance: 8,
-      },
+      activationConstraint: { distance: 8 },
     }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
@@ -318,34 +315,8 @@ const EditorPanel: React.FC = () => {
            <div className="w-20 h-20 bg-blue-600/10 rounded-3xl flex items-center justify-center mb-8 border border-blue-500/20">
              <Sparkles className="w-10 h-10 text-blue-500" />
            </div>
-           
            <h2 className="text-2xl font-black text-zinc-100 mb-2 tracking-tight">开启您的精英简历之旅</h2>
-           <p className="text-zinc-500 mb-12 text-center max-w-sm">请从左侧选择一个模块开始编辑，或点击下方按钮进行全局配置。</p>
-
-           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
-             <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl hover:border-blue-500/30 transition-all group">
-               <Wand2 className="w-6 h-6 text-blue-400 mb-4 group-hover:scale-110 transition-transform" />
-               <h3 className="font-bold text-zinc-200 mb-2">AI 智能润色</h3>
-               <p className="text-xs text-zinc-500 leading-relaxed">在任何输入框中选中文字，即可唤起 AI 工具栏进行润色或扩充内容。</p>
-             </div>
-             
-             <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl hover:border-emerald-500/30 transition-all group">
-               <Palette className="w-6 h-6 text-emerald-400 mb-4 group-hover:scale-110 transition-transform" />
-               <h3 className="font-bold text-zinc-200 mb-2">视觉排版定制</h3>
-               <p className="text-xs text-zinc-500 leading-relaxed">通过右上方设置面板，自由调整全文字号与行间距，确保 A4 完美呈现。</p>
-             </div>
-
-             <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl hover:border-amber-500/30 transition-all group">
-               <FileCheck className="w-6 h-6 text-amber-400 mb-4 group-hover:scale-110 transition-transform" />
-               <h3 className="font-bold text-zinc-200 mb-2">深度诊断报告</h3>
-               <p className="text-xs text-zinc-500 leading-relaxed">点击上方“简历诊断”，获取基于 STAR 法则与量化数据的深度评估意见。</p>
-             </div>
-
-             <div className="p-6 bg-zinc-900/50 border border-zinc-800 rounded-2xl hover:border-blue-500/30 transition-all group flex flex-col justify-center items-center cursor-pointer" onClick={() => setSettingsOpen(true)}>
-               <Settings className="w-8 h-8 text-zinc-500 mb-2 group-hover:rotate-90 transition-transform duration-500" />
-               <span className="text-xs font-black uppercase tracking-widest text-zinc-400 group-hover:text-blue-400">去配置 AI 模型</span>
-             </div>
-           </div>
+           <p className="text-zinc-500 mb-12 text-center max-w-sm">请从左侧选择一个模块开始编辑。</p>
         </div>
       ) : (
         <>
@@ -356,34 +327,20 @@ const EditorPanel: React.FC = () => {
                 value={activeBlock.title}
                 onChange={(e) => updateBlockTitle(activeBlock.id, e.target.value)}
               />
-              <div className="flex items-center gap-2 mt-1.5">
-                <span className="text-[10px] font-black uppercase tracking-widest text-zinc-600 bg-zinc-800/50 px-2 py-0.5 rounded border border-zinc-800">当前模块</span>
-                <p className="text-xs text-zinc-500">点击名称可重命名</p>
-              </div>
             </div>
             {activeBlock.type !== 'personal' && (
-              <button onClick={() => confirm('确定删除整个模块？') && removeBlock(activeBlock.id)} className="text-zinc-500 hover:text-red-400 p-2 rounded-lg hover:bg-red-400/10 transition-all" title="删除此模块">
+              <button onClick={() => confirm('确定删除整个模块？') && removeBlock(activeBlock.id)} className="text-zinc-500 hover:text-red-400 p-2 rounded-lg transition-all">
                 <Trash2 className="w-4 h-4" />
               </button>
             )}
           </div>
 
           <div className="space-y-6">
-            <DndContext
-              sensors={sensors}
-              collisionDetection={closestCenter}
-              onDragEnd={handleDragEnd}
-            >
-              <SortableContext
-                items={activeBlock.items.map(i => i.id)}
-                strategy={verticalListSortingStrategy}
-              >
+            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+              <SortableContext items={activeBlock.items.map(i => i.id)} strategy={verticalListSortingStrategy}>
                 {activeBlock.items.map((item, idx) => (
                   <SortableItem 
-                    key={item.id} 
-                    item={item} 
-                    idx={idx} 
-                    activeBlock={activeBlock}
+                    key={item.id} item={item} idx={idx} activeBlock={activeBlock}
                     updateBlockItemField={updateBlockItemField}
                     removeBlockItem={removeBlockItem}
                     toggleBlockItemExpanded={toggleBlockItemExpanded}
@@ -401,19 +358,6 @@ const EditorPanel: React.FC = () => {
                 <span className="text-sm font-bold uppercase tracking-widest">添加新记录</span>
               </button>
             )}
-          </div>
-
-          {/* Persistent Hint Banner */}
-          <div className="mt-20 p-6 bg-blue-600/5 border border-blue-500/20 rounded-2xl flex items-start gap-4">
-             <div className="mt-1 flex-none w-8 h-8 rounded-full bg-blue-600/10 flex items-center justify-center text-blue-500">
-                <Wand2 className="w-4 h-4" />
-             </div>
-             <div>
-               <h4 className="text-sm font-bold text-blue-400 mb-1">💡 专家提示：如何使用 AI？</h4>
-               <p className="text-xs text-zinc-500 leading-relaxed">
-                 在任何记录的输入框内，<b>选中您想要优化的文字</b>，上方会自动弹出 AI 润色工具。AI 将基于专业语境为您重写内容，突出重点并量化成果。
-               </p>
-             </div>
           </div>
         </>
       )}

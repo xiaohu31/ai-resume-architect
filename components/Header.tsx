@@ -14,7 +14,8 @@ const Header: React.FC<HeaderProps> = ({ onDiagnosis, onVersions, onPrint }) => 
   const { resume, updateResumeTitle, setSettingsOpen } = useResumeStore();
   // Fix: Access zundo's temporal store via type assertion to avoid TypeScript property error
   const temporalStore = (useResumeStore as any).temporal;
-  const { undo, redo, pastStates, futureStates } = useStore(temporalStore);
+  // Use 'any' cast to access properties from the temporal store state which are provided by zundo
+  const { undo, redo, pastStates, futureStates } = useStore(temporalStore) as any;
   const [isEditing, setIsEditing] = React.useState(false);
 
   const canUndo = pastStates.length > 0;

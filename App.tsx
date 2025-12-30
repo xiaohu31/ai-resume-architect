@@ -1,4 +1,6 @@
 
+'use client';
+
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import Header from './components/Header';
 import SideNav from './components/SideNav';
@@ -13,7 +15,6 @@ import * as ReactToPrint from 'react-to-print';
 
 const App: React.FC = () => {
   const { resume } = useResumeStore();
-  // Fix: Access zundo's temporal store via type assertion to avoid TypeScript property error
   const temporalStore = (useResumeStore as any).temporal;
   const [showDiagnosis, setShowDiagnosis] = useState(false);
   const [showVersions, setShowVersions] = useState(false);
@@ -21,13 +22,10 @@ const App: React.FC = () => {
 
   const contentRef = useRef<HTMLDivElement>(null);
 
-  // Safely extract the hook from the module
   const useReactToPrintHook = useMemo(() => {
     return (ReactToPrint as any).useReactToPrint || (ReactToPrint as any).default?.useReactToPrint;
   }, []);
   
-  // Conditionally call the hook if available
-  // react-to-print v3 API: Returns a trigger function
   const handlePrint = typeof useReactToPrintHook === 'function' 
     ? useReactToPrintHook({
         contentRef,
@@ -39,7 +37,6 @@ const App: React.FC = () => {
     if (handlePrint) {
       handlePrint();
     } else {
-      console.warn('react-to-print: useReactToPrint hook not found, falling back to window.print');
       window.print();
     }
   };
@@ -47,37 +44,13 @@ const App: React.FC = () => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const isCmdOrCtrl = e.metaKey || e.ctrlKey;
-      
-      // CMD/CTRL + S for Quick Snapshot / Version Manager
-      if (isCmdOrCtrl && e.key === 's') {
-        e.preventDefault();
-        setShowVersions(true);
-      }
-      // CMD/CTRL + P for Print
-      if (isCmdOrCtrl && e.key === 'p') {
-        e.preventDefault();
-        triggerPrint();
-      }
-      // CMD/CTRL + Z for Undo
-      if (isCmdOrCtrl && e.key === 'z' && !e.shiftKey) {
-        // If user is focused on an input/textarea, let browser handle it first?
-        // Actually, for a resume builder, custom undo is better.
-        // But to be safe, only if not inside an input if preferred.
-        // However, zundo tracks the whole resume object which is better.
-        e.preventDefault();
-        temporalStore.getState().undo();
-      }
-      // CMD/CTRL + SHIFT + Z or CMD/CTRL + Y for Redo
-      if ((isCmdOrCtrl && e.shiftKey && e.key === 'z') || (isCmdOrCtrl && e.key === 'y')) {
-        e.preventDefault();
-        temporalStore.getState().redo();
-      }
+      if (isCmdOrCtrl && e.key === 's') { e.preventDefault(); setShowVersions(true); }
+      if (isCmdOrCtrl && e.key === 'p') { e.preventDefault(); triggerPrint(); }
+      if (isCmdOrCtrl && e.key === 'z' && !e.shiftKey) { e.preventDefault(); temporalStore.getState().undo(); }
+      if ((isCmdOrCtrl && e.shiftKey && e.key === 'z') || (isCmdOrCtrl && e.key === 'y')) { e.preventDefault(); temporalStore.getState().redo(); }
     };
 
     window.addEventListener('keydown', handleKeyDown);
-    if (window.innerWidth < 768) {
-        console.warn("Desktop view is recommended for the best editing experience.");
-    }
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [resume.title, handlePrint, temporalStore]);
 
@@ -116,17 +89,11 @@ const App: React.FC = () => {
         </main>
       </div>
 
-      {/* Floating UI layers */}
       <AIToolbar />
       <SettingsModal />
       
-      {showDiagnosis && (
-        <DiagnosisDialog onClose={() => setShowDiagnosis(false)} />
-      )}
-
-      {showVersions && (
-        <VersionManager onClose={() => setShowVersions(false)} />
-      )}
+      {showDiagnosis && <DiagnosisDialog onClose={() => setShowDiagnosis(false)} />}
+      {showVersions && <VersionManager onClose={() => setShowVersions(false)} />}
     </div>
   );
 };

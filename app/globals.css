@@ -1,0 +1,55 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 237, 237, 237;
+  --background-start-rgb: 10, 10, 10;
+  --background-end-rgb: 0, 0, 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #0a0a0a;
+  color: #ededed;
+}
+
+.preview-a4 {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 15mm;
+  margin: auto;
+  background: white;
+  color: black;
+  box-shadow: 0 0 20px rgba(0,0,0,0.5);
+  box-sizing: border-box;
+}
+
+@media print {
+  body { background: white !important; }
+  .no-print { display: none !important; }
+  .preview-a4 {
+    box-shadow: none !important;
+    margin: 0 !important;
+    width: 100% !important;
+    padding: 10mm !important;
+    transform: none !important;
+  }
+  @page {
+    size: A4;
+    margin: 0;
+  }
+}
+
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+.custom-scrollbar::-webkit-scrollbar { width: 6px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: #1a1a1a; }
+.custom-scrollbar::-webkit-scrollbar-thumb { background: #333; border-radius: 10px; }
+.custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #444; }
+
+.prose-sm { font-size: 0.75rem; line-height: 1.5; }
+.prose-sm ul { list-style-type: disc; padding-left: 1.25rem; margin-top: 0.25rem; }
+.prose-sm p { margin-bottom: 0.25rem; }
