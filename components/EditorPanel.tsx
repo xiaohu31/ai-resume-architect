@@ -69,9 +69,9 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => 
           className="z-[120] bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-4 w-64 animate-in fade-in zoom-in duration-200"
         >
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
-            <button onClick={() => setCurrentYear(currentYear - 1)} className="p-1 hover:text-blue-400"><ChevronLeft className="w-4 h-4"/></button>
+            <button onClick={() => setCurrentYear(currentYear - 1)} className="p-1 hover:text-blue-400"><ChevronLeft className="w-4 h-4" /></button>
             <span className="font-bold text-zinc-100">{currentYear} 年</span>
-            <button onClick={() => setCurrentYear(currentYear + 1)} className="p-1 hover:text-blue-400"><ChevronRight className="w-4 h-4"/></button>
+            <button onClick={() => setCurrentYear(currentYear + 1)} className="p-1 hover:text-blue-400"><ChevronRight className="w-4 h-4" /></button>
           </div>
 
           <div className="grid grid-cols-4 gap-2 mb-4">
@@ -82,9 +82,8 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => 
                 <button
                   key={m}
                   onClick={() => handleSelect(idx)}
-                  className={`py-2 text-[11px] rounded-lg transition-all ${
-                    isSelected ? 'bg-blue-600 text-white font-bold' : 'hover:bg-zinc-800 text-zinc-400'
-                  }`}
+                  className={`py-2 text-[11px] rounded-lg transition-all ${isSelected ? 'bg-blue-600 text-white font-bold' : 'hover:bg-zinc-800 text-zinc-400'
+                    }`}
                 >
                   {m}
                 </button>
@@ -94,9 +93,8 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => 
 
           <button
             onClick={handlePresent}
-            className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all border ${
-              value === '至今' ? 'bg-zinc-800 border-blue-500 text-blue-400' : 'bg-zinc-800 border-transparent hover:border-zinc-700 text-zinc-300'
-            }`}
+            className={`w-full py-2.5 rounded-xl text-sm font-bold transition-all border ${value === '至今' ? 'bg-zinc-800 border-blue-500 text-blue-400' : 'bg-zinc-800 border-transparent hover:border-zinc-700 text-zinc-300'
+              }`}
           >
             至今
           </button>
@@ -116,13 +114,13 @@ interface SortableItemProps {
   toggleBlockItemExpanded: any;
 }
 
-const SortableItem = ({ 
-  item, 
-  idx, 
-  activeBlock, 
-  updateBlockItemField, 
-  removeBlockItem, 
-  toggleBlockItemExpanded 
+const SortableItem = ({
+  item,
+  idx,
+  activeBlock,
+  updateBlockItemField,
+  removeBlockItem,
+  toggleBlockItemExpanded
 }: SortableItemProps) => {
   const {
     attributes,
@@ -153,7 +151,7 @@ const SortableItem = ({
 
     if (type === 'textarea') {
       return (
-        <FieldAIAssistant 
+        <FieldAIAssistant
           key={field}
           label={label}
           placeholder={placeholder}
@@ -169,7 +167,7 @@ const SortableItem = ({
     return (
       <div key={field} className="mb-4">
         <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 px-1">{label}</label>
-        <input 
+        <input
           className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none transition-all placeholder:text-zinc-600 text-zinc-200"
           value={value}
           placeholder={placeholder}
@@ -191,12 +189,12 @@ const SortableItem = ({
   };
 
   return (
-    <div 
+    <div
       ref={setNodeRef}
       style={style}
       className="bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden shadow-sm"
     >
-      <div 
+      <div
         className="flex items-center justify-between px-4 py-3 bg-zinc-800/20 cursor-pointer hover:bg-zinc-800/40"
         onClick={() => toggleBlockItemExpanded(activeBlock.id, item.id)}
       >
@@ -209,8 +207,8 @@ const SortableItem = ({
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={(e) => { e.stopPropagation(); removeBlockItem(activeBlock.id, item.id); }} className="p-1.5 text-zinc-500 hover:text-red-400"><Trash2 className="w-3.5 h-3.5"/></button>
-          {item.isExpanded ? <ChevronUp className="w-4 h-4 text-zinc-500"/> : <ChevronDown className="w-4 h-4 text-zinc-500"/>}
+          <button onClick={(e) => { e.stopPropagation(); removeBlockItem(activeBlock.id, item.id); }} className="p-1.5 text-zinc-500 hover:text-red-400"><Trash2 className="w-3.5 h-3.5" /></button>
+          {item.isExpanded ? <ChevronUp className="w-4 h-4 text-zinc-500" /> : <ChevronDown className="w-4 h-4 text-zinc-500" />}
         </div>
       </div>
 
@@ -275,7 +273,7 @@ const SortableItem = ({
           )}
 
           {(activeBlock.type === 'skills' || activeBlock.type === 'custom') && (
-             renderField('content', '模块内容', '支持 Markdown 列表', 'textarea')
+            renderField('content', '模块内容', '支持 Markdown 列表', 'textarea')
           )}
         </div>
       )}
@@ -285,12 +283,12 @@ const SortableItem = ({
 
 // --- EditorPanel Component ---
 const EditorPanel: React.FC = () => {
-  const { 
-    resume, activeBlockId, updateBlockItemField, addBlockItem, 
-    removeBlockItem, toggleBlockItemExpanded, removeBlock, updateBlockTitle, reorderItems, setSettingsOpen 
+  const {
+    resume, activeBlockId, updateBlockItemField, addBlockItem,
+    removeBlockItem, toggleBlockItemExpanded, removeBlock, updateBlockTitle, reorderItems, setSettingsOpen
   } = useResumeStore();
 
-  const activeBlock = resume.blocks.find(b => b.id === activeBlockId);
+  const activeBlock = resume?.blocks?.find(b => b.id === activeBlockId);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -312,17 +310,17 @@ const EditorPanel: React.FC = () => {
     <div className="max-w-3xl mx-auto p-8 min-h-full no-print pb-32">
       {!activeBlock ? (
         <div className="py-12 flex flex-col items-center justify-center animate-in fade-in slide-in-from-bottom-4 duration-700">
-           <div className="w-20 h-20 bg-blue-600/10 rounded-3xl flex items-center justify-center mb-8 border border-blue-500/20">
-             <Sparkles className="w-10 h-10 text-blue-500" />
-           </div>
-           <h2 className="text-2xl font-black text-zinc-100 mb-2 tracking-tight">开启您的精英简历之旅</h2>
-           <p className="text-zinc-500 mb-12 text-center max-w-sm">请从左侧选择一个模块开始编辑。</p>
+          <div className="w-20 h-20 bg-blue-600/10 rounded-3xl flex items-center justify-center mb-8 border border-blue-500/20">
+            <Sparkles className="w-10 h-10 text-blue-500" />
+          </div>
+          <h2 className="text-2xl font-black text-zinc-100 mb-2 tracking-tight">开启您的精英简历之旅</h2>
+          <p className="text-zinc-500 mb-12 text-center max-w-sm">请从左侧选择一个模块开始编辑。</p>
         </div>
       ) : (
         <>
           <div className="flex items-center justify-between mb-8 group">
             <div>
-              <input 
+              <input
                 className="bg-transparent text-2xl font-bold text-zinc-100 outline-none border-b border-transparent focus:border-blue-500/50 transition-all w-full"
                 value={activeBlock.title}
                 onChange={(e) => updateBlockTitle(activeBlock.id, e.target.value)}
@@ -339,7 +337,7 @@ const EditorPanel: React.FC = () => {
             <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
               <SortableContext items={activeBlock.items.map(i => i.id)} strategy={verticalListSortingStrategy}>
                 {activeBlock.items.map((item, idx) => (
-                  <SortableItem 
+                  <SortableItem
                     key={item.id} item={item} idx={idx} activeBlock={activeBlock}
                     updateBlockItemField={updateBlockItemField}
                     removeBlockItem={removeBlockItem}
@@ -350,7 +348,7 @@ const EditorPanel: React.FC = () => {
             </DndContext>
 
             {activeBlock.type !== 'personal' && (
-              <button 
+              <button
                 onClick={() => addBlockItem(activeBlock.id)}
                 className="w-full py-6 border-2 border-dashed border-zinc-800 hover:border-blue-500/50 hover:bg-blue-500/5 rounded-2xl flex items-center justify-center gap-2 text-zinc-500 hover:text-blue-400 transition-all group"
               >

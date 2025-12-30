@@ -61,22 +61,20 @@ const SortableBlock = ({ block, activeBlockId, setActiveBlock, isExpanded }: Sor
     >
       <button
         onClick={() => setActiveBlock(block.id)}
-        className={`w-full p-3 rounded-xl transition-all relative flex items-center ${
-          isExpanded ? 'justify-start gap-3' : 'justify-center'
-        } ${
-          activeBlockId === block.id 
-            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20' 
+        className={`w-full p-3 rounded-xl transition-all relative flex items-center ${isExpanded ? 'justify-start gap-3' : 'justify-center'
+          } ${activeBlockId === block.id
+            ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/20'
             : 'text-zinc-500 hover:text-zinc-200 hover:bg-zinc-900'
-        }`}
+          }`}
       >
         <span className="flex-none">{blockIcons[block.type] || blockIcons.custom}</span>
-        
+
         {isExpanded && (
           <span className="text-sm font-medium whitespace-nowrap overflow-hidden text-ellipsis">
             {block.title}
           </span>
         )}
-        
+
         {/* Tooltip - only show when collapsed */}
         {!isExpanded && (
           <div className="absolute left-full ml-4 px-2 py-1 bg-zinc-800 text-zinc-200 text-xs rounded opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap shadow-xl border border-zinc-700 z-50">
@@ -88,14 +86,13 @@ const SortableBlock = ({ block, activeBlockId, setActiveBlock, isExpanded }: Sor
           <div className={`absolute top-1/2 -translate-y-1/2 w-1 h-6 bg-blue-500 rounded-full ${isExpanded ? '-left-1' : '-left-1'}`}></div>
         )}
       </button>
-      
+
       {/* Small drag handle on hover */}
-      <div 
-        {...attributes} 
+      <div
+        {...attributes}
         {...listeners}
-        className={`absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing p-1 text-zinc-600 hover:text-zinc-400 ${
-          isExpanded ? 'right-4' : '-right-2'
-        }`}
+        className={`absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing p-1 text-zinc-600 hover:text-zinc-400 ${isExpanded ? 'right-4' : '-right-2'
+          }`}
       >
         <GripVertical className="w-3 h-3" />
       </div>
@@ -134,7 +131,7 @@ const SideNav: React.FC = () => {
 
   return (
     <nav className={`${isExpanded ? 'w-56' : 'w-20'} bg-zinc-950 border-r border-zinc-900 flex flex-col items-center py-6 gap-6 z-10 no-print transition-all duration-300 ease-in-out`}>
-      <button 
+      <button
         onClick={() => setIsExpanded(!isExpanded)}
         className="w-8 h-8 flex items-center justify-center bg-zinc-900 rounded-lg text-zinc-500 hover:text-zinc-100 transition-colors border border-zinc-800"
       >
@@ -148,15 +145,15 @@ const SideNav: React.FC = () => {
           onDragEnd={handleDragEnd}
         >
           <SortableContext
-            items={resume.blocks.map(b => b.id)}
+            items={resume?.blocks?.map(b => b.id) || []}
             strategy={verticalListSortingStrategy}
           >
-            {resume.blocks.map((block) => (
-              <SortableBlock 
-                key={block.id} 
-                block={block} 
-                activeBlockId={activeBlockId} 
-                setActiveBlock={setActiveBlock} 
+            {resume?.blocks?.map((block) => (
+              <SortableBlock
+                key={block.id}
+                block={block}
+                activeBlockId={activeBlockId}
+                setActiveBlock={setActiveBlock}
                 isExpanded={isExpanded}
               />
             ))}
@@ -166,7 +163,7 @@ const SideNav: React.FC = () => {
 
       <div className="flex-1"></div>
 
-      <button 
+      <button
         onClick={handleAddCustom}
         className={`w-full px-3 py-3 text-zinc-500 hover:text-emerald-400 transition-colors group relative flex items-center ${isExpanded ? 'justify-start gap-3' : 'justify-center'}`}
       >

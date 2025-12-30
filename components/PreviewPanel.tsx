@@ -14,15 +14,15 @@ const blockIcons: Record<string, any> = {
 
 const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
   const { resume } = useResumeStore();
-  const { settings } = resume;
+  const settings = resume?.settings || { fontSize: 12, lineHeight: 1.5 };
 
-  const personalBlock = resume.blocks.find(b => b.type === 'personal');
+  const personalBlock = resume?.blocks?.find(b => b.type === 'personal');
   const personalInfo = personalBlock?.items[0]?.fields || {};
 
   // Custom styles for markdown and general text
   const textStyle = {
-    fontSize: `${settings.fontSize}px`,
-    lineHeight: settings.lineHeight,
+    fontSize: `${settings.fontSize || 12}px`,
+    lineHeight: settings.lineHeight || 1.5,
   };
 
   return (
@@ -30,8 +30,8 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
       {/* Interactive Guide Overlay (No Print) */}
       <div className="absolute -top-12 left-0 right-0 flex justify-center no-print pointer-events-none group-hover/preview:opacity-100 opacity-0 transition-opacity">
         <div className="bg-zinc-800/90 backdrop-blur border border-zinc-700 px-4 py-1.5 rounded-full text-[10px] text-zinc-400 flex items-center gap-2 shadow-2xl">
-           <Zap className="w-3 h-3 text-blue-400" />
-           <span>实时渲染预览：修改字号与间距可优化分页布局</span>
+          <Zap className="w-3 h-3 text-blue-400" />
+          <span>实时渲染预览：修改字号与间距可优化分页布局</span>
         </div>
       </div>
 
@@ -49,11 +49,11 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
 
         {/* 5-Column Contact Info */}
         <div className="grid grid-cols-5 gap-1 mb-8 pb-4 border-b border-zinc-100 text-[11px] text-zinc-600">
-          <div className="flex items-center justify-center gap-1.5"><User className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.gender} | {personalInfo.age}</div>
-          <div className="flex items-center justify-center gap-1.5"><Phone className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.phone}</div>
-          <div className="flex items-center justify-center gap-1.5"><Mail className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.email}</div>
-          <div className="flex items-center justify-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.wechat}</div>
-          <div className="flex items-center justify-center gap-1.5"><Github className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.github}</div>
+          <div className="flex items-center justify-center gap-1.5"><User className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.gender} | {personalInfo.age}</div>
+          <div className="flex items-center justify-center gap-1.5"><Phone className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.phone}</div>
+          <div className="flex items-center justify-center gap-1.5"><Mail className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.email}</div>
+          <div className="flex items-center justify-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.wechat}</div>
+          <div className="flex items-center justify-center gap-1.5"><Github className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.github}</div>
         </div>
 
         <div className="space-y-6">
@@ -66,7 +66,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
                   <Icon className="w-4 h-4 text-zinc-800" />
                   <h2 className="text-[15px] font-bold text-zinc-900 tracking-wide">{block.title}</h2>
                 </div>
-                
+
                 <div className="space-y-4">
                   {block.items.map((item) => (
                     <div key={item.id}>
@@ -87,7 +87,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
                             </div>
                             <span className="text-[11px] font-mono text-zinc-500">{item.fields.duration}</span>
                           </div>
-                          
+
                           {/* Content */}
                           <div className="text-zinc-700" style={textStyle}>
                             <div className="font-bold text-zinc-900 mb-0.5 mt-1">工作内容：</div>
@@ -118,7 +118,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
             );
           })}
         </div>
-        
+
         <div className="mt-12 pt-10 text-[9px] text-zinc-300 italic text-center no-print">
           Design compliant with A4 printing standards
         </div>
