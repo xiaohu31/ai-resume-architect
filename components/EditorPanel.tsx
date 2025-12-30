@@ -17,7 +17,7 @@ import {
   useSortable,
 } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
-import { useFloating, offset, flip, shift, autoUpdate } from '@floating-ui/react';
+import { useFloating, offset, flip, shift, autoUpdate, useDismiss, useInteractions } from '@floating-ui/react';
 import FieldAIAssistant from './FieldAIAssistant';
 
 // --- MonthPicker Component ---
@@ -30,12 +30,15 @@ interface MonthPickerProps {
 const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
-  const { refs, floatingStyles } = useFloating({
+  const { refs, floatingStyles, context } = useFloating({
     open: isOpen,
     onOpenChange: setIsOpen,
     middleware: [offset(10), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
+
+  const dismiss = useDismiss(context);
+  const { getReferenceProps, getFloatingProps } = useInteractions([dismiss]);
 
   const months = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
 
@@ -55,6 +58,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => 
       <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 px-1">{label}</label>
       <button
         ref={refs.setReference}
+        {...getReferenceProps()}
         onClick={() => setIsOpen(!isOpen)}
         className="w-full bg-zinc-800/50 border border-zinc-700/50 rounded-lg px-3 py-2 text-sm text-left focus:border-blue-500 outline-none transition-all flex items-center justify-between"
       >
@@ -66,6 +70,7 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => 
         <div
           ref={refs.setFloating}
           style={floatingStyles}
+          {...getFloatingProps()}
           className="z-[120] bg-zinc-900 border border-zinc-800 rounded-2xl shadow-2xl p-4 w-64 animate-in fade-in zoom-in duration-200"
         >
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-zinc-800">
@@ -106,6 +111,8 @@ const MonthPicker: React.FC<MonthPickerProps> = ({ value, onChange, label }) => 
 
 // --- SortableItem Component ---
 interface SortableItemProps {
+  key?: any;
+  id: string;
   item: any;
   idx: number;
   activeBlock: any;
@@ -115,6 +122,7 @@ interface SortableItemProps {
 }
 
 const SortableItem = ({
+  id,
   item,
   idx,
   activeBlock,
@@ -338,7 +346,7 @@ const EditorPanel: React.FC = () => {
               <SortableContext items={activeBlock.items.map(i => i.id)} strategy={verticalListSortingStrategy}>
                 {activeBlock.items.map((item, idx) => (
                   <SortableItem
-                    key={item.id} item={item} idx={idx} activeBlock={activeBlock}
+                    key={item.id} id={item.id} item={item} idx={idx} activeBlock={activeBlock}
                     updateBlockItemField={updateBlockItemField}
                     removeBlockItem={removeBlockItem}
                     toggleBlockItemExpanded={toggleBlockItemExpanded}

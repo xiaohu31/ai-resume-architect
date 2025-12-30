@@ -82,9 +82,7 @@ const SortableBlock = ({ block, activeBlockId, setActiveBlock, isExpanded }: Sor
           </div>
         )}
 
-        {activeBlockId === block.id && (
-          <div className={`absolute top-1/2 -translate-y-1/2 w-1 h-6 bg-blue-500 rounded-full ${isExpanded ? '-left-1' : '-left-1'}`}></div>
-        )}
+
       </button>
 
       {/* Small drag handle on hover */}

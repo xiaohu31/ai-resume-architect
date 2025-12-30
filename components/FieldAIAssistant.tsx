@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Sparkles, Wand2, Check, X, Loader2, Zap, Copy, RefreshCcw, Scissors, MessageSquare, AlertCircle, TrendingUp } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Sparkles, Wand2, Check, X, Loader2, Zap, Copy, RefreshCcw, Scissors, MessageSquare, AlertCircle, TrendingUp, List, ListOrdered } from 'lucide-react';
 import { polishText, expandText, simplifyText, summarizeText } from '../geminiService';
 
 interface FieldAIAssistantProps {
@@ -17,6 +17,7 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
   const [error, setError] = useState<string | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const steps = ["分析上下文...", "挖掘技能点...", "对齐 STAR 法则...", "精雕细琢表达..."];
 
@@ -30,19 +31,17 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
     return () => clearInterval(interval);
   }, [loading]);
 
-  const handleAction = async (action: 'polish' | 'expand' | 'simplify' | 'summarize') => {
+  const handleAction = async (action: 'polish' | 'expand') => {
     if (!value.trim()) return;
     setLoading(true);
     setError(null);
     setSuggestion('');
-    
+
     try {
       let result = '';
-      switch(action) {
+      switch (action) {
         case 'polish': result = await polishText(value); break;
         case 'expand': result = await expandText(value); break;
-        case 'simplify': result = await simplifyText(value); break;
-        case 'summarize': result = await summarizeText(value); break;
       }
       setSuggestion(result);
     } catch (err: any) {
@@ -52,15 +51,111 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
     }
   };
 
+  const handleList = (type: 'ul' | 'ol') => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const text = textarea.value;
+
+    // 如果没有任何选中，则视为处理全部文本
+    const isFullText = start === end && text.length > 0;
+
+    let rangeStart, rangeEnd;
+    if (isFullText || (start === 0 && end === text.length)) {
+      rangeStart = 0;
+      rangeEnd = text.length;
+    } else {
+      rangeStart = text.lastIndexOf('\n', start - 1) + 1;
+      rangeEnd = text.indexOf('\n', end);
+      if (rangeEnd === -1) rangeEnd = text.length;
+    }
+
+    const before = text.substring(0, rangeStart);
+    const after = text.substring(rangeEnd);
+    const selection = text.substring(rangeStart, rangeEnd);
+
+    if (!selection && !isFullText) return;
+
+    const lines = selection.split('\n');
+
+    // 检查是否已经是同类型的列表，如果是则取消列表
+    const ulRegex = /^(\s*)-\s+/;
+    const olRegex = /^(\s*)\d+\.\s+/;
+
+    const isAllUl = lines.every(l => ulRegex.test(l) || !l.trim());
+    const isAllOl = lines.every(l => olRegex.test(l) || !l.trim());
+
+    let processedLines;
+    if (type === 'ul') {
+      if (isAllUl) {
+        // 取消无序列表
+        processedLines = lines.map(l => l.replace(ulRegex, '$1'));
+      } else {
+        // 变更为无序列表
+        processedLines = lines.map(l => {
+          if (olRegex.test(l)) return l.replace(olRegex, '$1- ');
+          if (ulRegex.test(l)) return l;
+          return `- ${l}`;
+        });
+      }
+    } else {
+      if (isAllOl) {
+        // 取消有序列表
+        processedLines = lines.map(l => l.replace(olRegex, '$1'));
+      } else {
+        // 变更为有序列表，强制重新排序
+        let counter = 1;
+        processedLines = lines.map(l => {
+          const content = l.replace(ulRegex, '$1').replace(olRegex, '$1').trim();
+          if (!content && !l.trim()) return l;
+          return `${counter++}. ${content}`;
+        });
+      }
+    }
+
+    const newFullText = before + processedLines.join('\n') + after;
+    onApply(newFullText);
+
+    // 恢复焦点并尽量保持选区
+    requestAnimationFrame(() => {
+      textarea.focus();
+      if (!isFullText) {
+        textarea.setSelectionRange(rangeStart, rangeStart + processedLines.join('\n').length);
+      }
+    });
+  };
+
   return (
     <div className="mb-6">
       <div className="flex items-center justify-between mb-2">
         <label className="text-[11px] font-bold text-zinc-500 uppercase tracking-widest">{label}</label>
-        <span className="text-[10px] text-zinc-600">字数: {value.length} / 1000</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center bg-zinc-800/50 rounded-lg p-0.5 border border-zinc-700/30">
+            <button
+              onClick={() => handleList('ul')}
+              className="p-1.5 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 rounded-md transition-all"
+              title="无序列表"
+            >
+              <List className="w-3.5 h-3.5" />
+            </button>
+            <div className="w-[1px] h-3 bg-zinc-700 mx-0.5 opacity-50" />
+            <button
+              onClick={() => handleList('ol')}
+              className="p-1.5 hover:bg-zinc-700 text-zinc-400 hover:text-zinc-200 rounded-md transition-all"
+              title="有序列表"
+            >
+              <ListOrdered className="w-3.5 h-3.5" />
+            </button>
+          </div>
+          <span className="text-[10px] text-zinc-600">字数: {value.length} / 1000</span>
+        </div>
       </div>
-      
+
       <div className="relative bg-zinc-900 border border-zinc-800 rounded-xl overflow-hidden focus-within:border-blue-500/50 transition-all">
-        <textarea 
+        <textarea
+          ref={textareaRef}
           rows={5}
           className="w-full bg-transparent px-4 py-3 text-sm text-zinc-200 outline-none placeholder:text-zinc-700 resize-none font-sans leading-relaxed custom-scrollbar"
           value={value}
@@ -70,7 +165,7 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
           data-field={field}
           onChange={(e) => onApply(e.target.value)}
         />
-        
+
         {/* AI Action Bar */}
         <div className="h-12 bg-[#0d1e1e] flex items-center justify-between px-3 border-t border-zinc-800/50">
           <div className="flex items-center gap-1.5">
@@ -78,12 +173,10 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
               <Sparkles className="w-3.5 h-3.5 fill-current opacity-70" />
               <span className="text-xs font-black italic">AI+</span>
             </div>
-            
+
             {[
               { id: 'polish', label: '润色', icon: Wand2 },
-              { id: 'simplify', label: '简化', icon: Scissors },
               { id: 'expand', label: '扩展', icon: Zap },
-              { id: 'summarize', label: '总结', icon: MessageSquare },
             ].map((btn) => (
               <button
                 key={btn.id}
@@ -94,9 +187,6 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
                 {btn.label}
               </button>
             ))}
-          </div>
-          <div className="flex items-center gap-1 text-[10px] text-zinc-500">
-            今日剩余20次 <AlertCircle className="w-3 h-3" />
           </div>
         </div>
       </div>
@@ -128,7 +218,7 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
                     {suggestion}
                   </div>
                   <div className="flex gap-2">
-                    <button 
+                    <button
                       onClick={() => { onApply(suggestion); setSuggestion(''); }}
                       className="flex-1 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-xs font-black transition-all flex items-center justify-center gap-2"
                     >
