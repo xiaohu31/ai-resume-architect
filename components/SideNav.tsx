@@ -36,7 +36,7 @@ interface SortableBlockProps {
   isExpanded: boolean;
 }
 
-const SortableBlock = ({ block, activeBlockId, setActiveBlock, isExpanded }: SortableBlockProps) => {
+const SortableBlock: React.FC<SortableBlockProps> = ({ block, activeBlockId, setActiveBlock, isExpanded }) => {
   const {
     attributes,
     listeners,
@@ -89,10 +89,10 @@ const SortableBlock = ({ block, activeBlockId, setActiveBlock, isExpanded }: Sor
       <div
         {...attributes}
         {...listeners}
-        className={`absolute top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 cursor-grab active:cursor-grabbing p-1 text-zinc-600 hover:text-zinc-400 ${isExpanded ? 'right-4' : '-right-2'
+        className={`absolute top-1/2 -translate-y-1/2 cursor-grab active:cursor-grabbing p-1.5 text-zinc-600 hover:text-zinc-300 transition-colors ${isExpanded ? 'right-3' : 'right-1'
           }`}
       >
-        <GripVertical className="w-3 h-3" />
+        <GripVertical className="w-4 h-4" />
       </div>
     </div>
   );

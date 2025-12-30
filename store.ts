@@ -42,8 +42,11 @@ const initialResume: ResumeContent = {
   settings: {
     fontSize: 11,
     lineHeight: 1.6,
-    modelName: 'gemini-1.5-flash',
+    modelName: 'gemini-2.0-flash',
     baseUrl: 'https://generativelanguage.googleapis.com',
+    apiKey: '',
+    provider: 'gemini',
+    apiEndpoint: '',
   },
   blocks: [
     {

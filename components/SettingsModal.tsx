@@ -1,24 +1,18 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useResumeStore } from '../store';
-import { X, Settings, Cpu, Palette, Key, ExternalLink } from 'lucide-react';
+import { X, Settings, Cpu, Palette, Key, ExternalLink, Eye, EyeOff } from 'lucide-react';
 
 const SettingsModal: React.FC = () => {
   const { resume, updateSettings, isSettingsOpen, setSettingsOpen } = useResumeStore();
+  const [showApiKey, setShowApiKey] = useState(false);
 
   if (!isSettingsOpen) return null;
 
-  const handleOpenKeyManager = async () => {
-    try {
-      if (typeof (window as any).aistudio?.openSelectKey === 'function') {
-        await (window as any).aistudio.openSelectKey();
-      } else {
-        alert("当前环境不支持平台密钥管理。");
-      }
-    } catch (e) {
-      console.error(e);
-    }
-  };
+  // 检查环境变量是否有 API Key
+  // @ts-ignore - Vite 在构建时会替换这个值
+  const envApiKey = process.env.GEMINI_API_KEY || '';
+  const hasEnvKey = !!envApiKey;
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[300] flex items-center justify-center p-6 animate-in fade-in">
@@ -33,11 +27,11 @@ const SettingsModal: React.FC = () => {
               <p className="text-xs text-zinc-500">配置 AI 模型参数与简历视觉样式</p>
             </div>
           </div>
-          <button 
-            onClick={() => setSettingsOpen(false)} 
+          <button
+            onClick={() => setSettingsOpen(false)}
             className="p-2 text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800 rounded-full transition-all"
           >
-            <X className="w-6 h-6"/>
+            <X className="w-6 h-6" />
           </button>
         </div>
 
@@ -48,42 +42,88 @@ const SettingsModal: React.FC = () => {
               <Cpu className="w-5 h-5 text-blue-400" />
               <h3 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">AI 模型配置</h3>
             </div>
-            
+
             <div className="grid grid-cols-1 gap-6 bg-zinc-800/20 p-6 rounded-2xl border border-zinc-800/50">
+              {/* 提供商选择 */}
+              <div>
+                <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-3 px-1">AI 提供商 (Provider)</label>
+                <div className="flex gap-3">
+                  <button
+                    onClick={() => updateSettings({ provider: 'gemini' })}
+                    className={`flex-1 px-4 py-3 rounded-xl text-sm font-bold transition-all border-2 ${(resume.settings.provider || 'gemini') === 'gemini'
+                      ? 'bg-blue-600 border-blue-500 text-white'
+                      : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                      }`}
+                  >
+                    Google Gemini
+                  </button>
+                  <button
+                    onClick={() => updateSettings({ provider: 'openai' })}
+                    className={`flex-1 px-4 py-3 rounded-xl text-sm font-bold transition-all border-2 ${resume.settings.provider === 'openai'
+                      ? 'bg-emerald-600 border-emerald-500 text-white'
+                      : 'bg-zinc-950 border-zinc-800 text-zinc-400 hover:border-zinc-700'
+                      }`}
+                  >
+                    OpenAI 兼容
+                  </button>
+                </div>
+              </div>
+
               <div>
                 <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-1">模型名称 (Model Name)</label>
-                <input 
+                <input
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all font-mono"
                   value={resume.settings.modelName}
                   onChange={(e) => updateSettings({ modelName: e.target.value })}
-                  placeholder="e.gemini-3-flash-preview"
+                  placeholder={(resume.settings.provider || 'gemini') === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini'}
                 />
-                <p className="text-[10px] text-zinc-600 mt-2 px-1">支持：gemini-3-flash-preview, gemini-3-pro-preview 等</p>
+                <p className="text-[10px] text-zinc-600 mt-2 px-1">
+                  {(resume.settings.provider || 'gemini') === 'gemini'
+                    ? '支持：gemini-2.0-flash、gemini-1.5-pro 等'
+                    : '支持：gpt-4o-mini、gpt-3.5-turbo、deepseek-chat 等'}
+                </p>
               </div>
 
-              <div>
-                <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-1">API 终端 (Base URL)</label>
-                <input 
-                  className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all font-mono"
-                  value={resume.settings.baseUrl}
-                  onChange={(e) => updateSettings({ baseUrl: e.target.value })}
-                  placeholder="https://generativelanguage.googleapis.com"
-                />
-              </div>
-
-              <div className="pt-2 border-t border-zinc-800/50 mt-2 flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Key className="w-4 h-4 text-emerald-400" />
-                  <span className="text-xs text-zinc-400">API 密钥管理</span>
+              {/* 自定义端点（仅OpenAI） */}
+              {resume.settings.provider === 'openai' && (
+                <div>
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-1">API 端点 (Custom Endpoint) <span className="text-zinc-600">- 可选</span></label>
+                  <input
+                    className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all font-mono"
+                    value={resume.settings.apiEndpoint || ''}
+                    onChange={(e) => updateSettings({ apiEndpoint: e.target.value })}
+                    placeholder="https://api.openai.com/v1 或第三方兼容服务"
+                  />
+                  <p className="text-[10px] text-zinc-600 mt-2 px-1">留空使用默认 OpenAI 端点；填写时支持 DeepSeek、Claude 等第三方服务</p>
                 </div>
-                <button 
-                  onClick={handleOpenKeyManager}
-                  className="flex items-center gap-2 px-4 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-lg text-xs font-bold transition-all border border-zinc-700"
-                >
-                  管理平台密钥
-                </button>
+              )}
+
+              <div className="pt-2 border-t border-zinc-800/50 mt-2">
+                <div className="flex items-center gap-2 mb-3">
+                  <Key className="w-4 h-4 text-emerald-400" />
+                  <span className="text-xs text-zinc-400">API 密钥</span>
+                  {hasEnvKey && (
+                    <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">环境变量已配置</span>
+                  )}
+                </div>
+                <div className="relative">
+                  <input
+                    type={showApiKey ? 'text' : 'password'}
+                    className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 pr-12 text-sm focus:border-blue-500 outline-none transition-all font-mono"
+                    value={resume.settings.apiKey || ''}
+                    onChange={(e) => updateSettings({ apiKey: e.target.value })}
+                    placeholder={hasEnvKey ? '已使用环境变量密钥' : '输入你的 Gemini API Key'}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowApiKey(!showApiKey)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors"
+                  >
+                    {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  </button>
+                </div>
+                <p className="text-[10px] text-zinc-500 mt-2 px-1">优先级：环境变量 GEMINI_API_KEY &gt; 此处输入的密钥</p>
               </div>
-              <p className="text-[10px] text-zinc-500 italic">注：系统优先使用环境变量注入的密钥。对于 Pro 模型，需通过平台选择付费密钥。</p>
             </div>
           </section>
 
@@ -93,14 +133,14 @@ const SettingsModal: React.FC = () => {
               <Palette className="w-5 h-5 text-emerald-400" />
               <h3 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">外观排版</h3>
             </div>
-            
+
             <div className="grid grid-cols-2 gap-8 bg-zinc-800/20 p-6 rounded-2xl border border-zinc-800/50">
               <div>
                 <div className="flex justify-between items-center mb-4 px-1">
                   <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">字体大小</label>
                   <span className="text-xs font-mono text-blue-400">{resume.settings.fontSize}px</span>
                 </div>
-                <input 
+                <input
                   type="range" min="10" max="16" step="0.5"
                   value={resume.settings.fontSize}
                   onChange={(e) => updateSettings({ fontSize: parseFloat(e.target.value) })}
@@ -112,7 +152,7 @@ const SettingsModal: React.FC = () => {
                   <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">行间距</label>
                   <span className="text-xs font-mono text-emerald-400">{resume.settings.lineHeight}</span>
                 </div>
-                <input 
+                <input
                   type="range" min="1" max="2.5" step="0.1"
                   value={resume.settings.lineHeight}
                   onChange={(e) => updateSettings({ lineHeight: parseFloat(e.target.value) })}
@@ -124,16 +164,16 @@ const SettingsModal: React.FC = () => {
         </div>
 
         <div className="p-6 border-t border-zinc-800 bg-zinc-900/50 flex justify-between items-center">
-          <a 
-            href="https://ai.google.dev/gemini-api/docs/billing" 
-            target="_blank" 
+          <a
+            href="https://ai.google.dev/gemini-api/docs/billing"
+            target="_blank"
             rel="noopener noreferrer"
             className="flex items-center gap-1.5 text-[10px] text-zinc-500 hover:text-blue-400 transition-colors"
           >
             <span>计费说明文档</span>
             <ExternalLink className="w-3 h-3" />
           </a>
-          <button 
+          <button
             onClick={() => setSettingsOpen(false)}
             className="px-8 py-2.5 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-600/20 active:scale-95"
           >

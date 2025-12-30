@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Sparkles, Wand2, Check, X, Loader2, Zap, Copy, RefreshCcw, Scissors, MessageSquare, AlertCircle, TrendingUp, List, ListOrdered } from 'lucide-react';
-import { polishText, expandText, simplifyText, summarizeText } from '../geminiService';
+import { polishText, expandText, simplifyText, summarizeText } from '../aiService';
 
 interface FieldAIAssistantProps {
   value: string;

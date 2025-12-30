@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useResumeStore } from '../store';
 import { Sparkles, Check, X, Loader2, Zap, RefreshCcw, Trash2, Bold, Italic } from 'lucide-react';
-import { polishText, expandText } from '../geminiService';
+import { polishText, expandText } from '../aiService';
 import {
   useFloating,
   offset,

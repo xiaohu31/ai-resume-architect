@@ -21,6 +21,9 @@ export interface ResumeSettings {
   lineHeight: number;
   modelName: string;
   baseUrl: string;
+  apiKey?: string;
+  provider?: 'gemini' | 'openai';
+  apiEndpoint?: string;
 }
 
 export interface ResumeContent {
@@ -51,6 +54,8 @@ export interface DiagnosisResult {
   level: 'excellent' | 'good' | 'average' | 'needsWork';
   issues: Array<{
     module: string;
+    blockId?: string;
+    itemId?: string;
     field?: string;
     severity: 'warning' | 'info';
     issue: string;

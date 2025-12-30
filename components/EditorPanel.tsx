@@ -210,8 +210,12 @@ const SortableItem = ({
           <div {...attributes} {...listeners} className="cursor-grab active:cursor-grabbing p-1 hover:text-zinc-300">
             <GripVertical className="w-4 h-4 text-zinc-600" />
           </div>
-          <span className="text-sm font-semibold text-zinc-300">
-            {(Object.values(item.fields)[0] as string) || `记录 #${idx + 1}`}
+          <span className="text-sm font-semibold text-zinc-300 truncate max-w-[200px]">
+            {activeBlock.type === 'skills'
+              ? '专业技能'
+              : activeBlock.type === 'custom'
+                ? '详细内容'
+                : ((Object.values(item.fields)[0] as string) || `记录 #${idx + 1}`)}
           </span>
         </div>
         <div className="flex items-center gap-2">
@@ -329,9 +333,10 @@ const EditorPanel: React.FC = () => {
           <div className="flex items-center justify-between mb-8 group">
             <div>
               <input
-                className="bg-transparent text-2xl font-bold text-zinc-100 outline-none border-b border-transparent focus:border-blue-500/50 transition-all w-full"
+                className="bg-transparent text-2xl font-bold text-zinc-100 outline-none border-b border-zinc-800 focus:border-blue-500/50 hover:border-zinc-700 transition-all w-full placeholder:text-zinc-600"
                 value={activeBlock.title}
                 onChange={(e) => updateBlockTitle(activeBlock.id, e.target.value)}
+                placeholder="请输入模块名称"
               />
             </div>
             {activeBlock.type !== 'personal' && (
