@@ -1,0 +1,5 @@
+{
+  "name": "AI Resume Architect 2025",
+  "description": "A modular, AI-powered resume builder featuring real-time preview, version control via IndexedDB, and intelligent content enhancement using Gemini AI.",
+  "requestFramePermissions": []
+}
