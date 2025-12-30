@@ -1,79 +1,132 @@
 
-import React from 'react';
+import React, { forwardRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useResumeStore } from '../store';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, User, MessageSquare, Github, Briefcase, GraduationCap, Award, FileText, Zap, AlertTriangle } from 'lucide-react';
 
-const PreviewPanel: React.FC = () => {
+const blockIcons: Record<string, any> = {
+  education: GraduationCap,
+  skills: Zap,
+  work: Briefcase,
+  project: FileText,
+  custom: User,
+};
+
+const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
   const { resume } = useResumeStore();
+  const { settings } = resume;
 
   const personalBlock = resume.blocks.find(b => b.type === 'personal');
   const personalInfo = personalBlock?.items[0]?.fields || {};
 
+  // Custom styles for markdown and general text
+  const textStyle = {
+    fontSize: `${settings.fontSize}px`,
+    lineHeight: settings.lineHeight,
+  };
+
   return (
-    <div className="preview-a4 shadow-2xl rounded-sm">
-      {/* Header Section */}
-      <div className="border-b-2 border-zinc-900 pb-6 mb-8 flex justify-between items-end">
-        <div>
-          <h1 className="text-4xl font-extrabold tracking-tight text-zinc-900 uppercase">{personalInfo.name || '姓名'}</h1>
-          <p className="text-lg text-blue-700 font-semibold mt-1">{personalInfo.target || '求职意向'}</p>
-        </div>
-        <div className="text-right text-xs text-zinc-600 space-y-1">
-          {personalInfo.phone && <div className="flex items-center justify-end gap-1.5"><Phone className="w-3 h-3"/> {personalInfo.phone}</div>}
-          {personalInfo.email && <div className="flex items-center justify-end gap-1.5"><Mail className="w-3 h-3"/> {personalInfo.email}</div>}
-          {personalInfo.city && <div className="flex items-center justify-end gap-1.5"><MapPin className="w-3 h-3"/> {personalInfo.city}</div>}
+    <div className="relative group/preview">
+      {/* Interactive Guide Overlay (No Print) */}
+      <div className="absolute -top-12 left-0 right-0 flex justify-center no-print pointer-events-none group-hover/preview:opacity-100 opacity-0 transition-opacity">
+        <div className="bg-zinc-800/90 backdrop-blur border border-zinc-700 px-4 py-1.5 rounded-full text-[10px] text-zinc-400 flex items-center gap-2 shadow-2xl">
+           <Zap className="w-3 h-3 text-blue-400" />
+           <span>实时渲染预览：修改字号与间距可优化分页布局</span>
         </div>
       </div>
 
-      <div className="space-y-8">
-        {resume.blocks.filter(b => b.visible && b.type !== 'personal').map((block) => (
-          <div key={block.id}>
-            <div className="flex items-center gap-2 mb-3 border-b border-zinc-200 pb-1">
-              <h2 className="text-sm font-bold text-zinc-900 uppercase tracking-widest">{block.title}</h2>
+      <div ref={ref} className="preview-a4 shadow-2xl rounded-sm print:shadow-none bg-white">
+        {/* Centered Avatar and Name */}
+        <div className="flex flex-col items-center mb-6">
+          {personalInfo.avatar && (
+            <div className="w-20 h-20 mb-3 border border-zinc-200 overflow-hidden bg-zinc-50">
+              <img src={personalInfo.avatar} alt="Avatar" className="w-full h-full object-cover" />
             </div>
-            
-            <div className="space-y-4">
-              {block.items.map((item) => (
-                <div key={item.id} className="group">
-                  {block.type === 'work' || block.type === 'project' ? (
-                    <div>
-                      <div className="flex justify-between items-start mb-1">
-                        <div className="font-bold text-zinc-900">{item.fields.name}</div>
-                        <div className="text-xs font-mono text-zinc-500">{item.fields.duration}</div>
-                      </div>
-                      <div className="text-xs italic text-blue-700 font-medium mb-2">{item.fields.role}</div>
-                      {/* Fix: Moved prose-sm to wrapper div and removed unsupported className from ReactMarkdown to fix type error */}
-                      <div className="text-xs text-zinc-700 leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none">
-                        <ReactMarkdown>{item.fields.content || ''}</ReactMarkdown>
-                      </div>
-                    </div>
-                  ) : block.type === 'education' ? (
-                    <div className="flex justify-between items-start">
-                       <div>
-                          <div className="font-bold text-zinc-900">{item.fields.school}</div>
-                          <div className="text-xs text-zinc-700">{item.fields.major} · {item.fields.degree}</div>
-                       </div>
-                       <div className="text-xs font-mono text-zinc-500">{item.fields.duration}</div>
-                    </div>
-                  ) : (
-                    <div className="text-xs text-zinc-700 leading-relaxed whitespace-pre-wrap prose prose-sm max-w-none">
-                       {/* Fix: Moved prose-sm to wrapper div and removed unsupported className from ReactMarkdown to fix type error */}
-                       <ReactMarkdown>{item.fields.content || ''}</ReactMarkdown>
-                    </div>
-                  )}
+          )}
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 mb-2">{personalInfo.name || '姓名'}</h1>
+          <p className="text-[12px] text-zinc-500 font-medium">{personalInfo.summary || '个人简述'}</p>
+        </div>
+
+        {/* 5-Column Contact Info */}
+        <div className="grid grid-cols-5 gap-1 mb-8 pb-4 border-b border-zinc-100 text-[11px] text-zinc-600">
+          <div className="flex items-center justify-center gap-1.5"><User className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.gender} | {personalInfo.age}</div>
+          <div className="flex items-center justify-center gap-1.5"><Phone className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.phone}</div>
+          <div className="flex items-center justify-center gap-1.5"><Mail className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.email}</div>
+          <div className="flex items-center justify-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.wechat}</div>
+          <div className="flex items-center justify-center gap-1.5"><Github className="w-3.5 h-3.5 text-zinc-800"/> {personalInfo.github}</div>
+        </div>
+
+        <div className="space-y-6">
+          {resume.blocks.filter(b => b.visible && b.type !== 'personal').map((block) => {
+            const Icon = blockIcons[block.type] || FileText;
+            return (
+              <div key={block.id} className="relative">
+                {/* Section Title */}
+                <div className="flex items-center gap-2 mb-3 border-b border-zinc-200 pb-1">
+                  <Icon className="w-4 h-4 text-zinc-800" />
+                  <h2 className="text-[15px] font-bold text-zinc-900 tracking-wide">{block.title}</h2>
                 </div>
-              ))}
-            </div>
-          </div>
-        ))}
-      </div>
-      
-      {/* Decorative Elements */}
-      <div className="mt-auto pt-10 text-[9px] text-zinc-300 italic text-center no-print">
-        本简历由 AI Resume Architect 2025 构建 | 实时预览模式
+                
+                <div className="space-y-4">
+                  {block.items.map((item) => (
+                    <div key={item.id}>
+                      {block.type === 'education' ? (
+                        <div className="grid grid-cols-4 items-center text-zinc-800" style={textStyle}>
+                          <div className="font-bold">{item.fields.school}</div>
+                          <div className="text-center">{item.fields.major}</div>
+                          <div className="text-center">{item.fields.degree}</div>
+                          <div className="text-right text-zinc-500 font-mono text-[11px]">{item.fields.duration}</div>
+                        </div>
+                      ) : block.type === 'work' || block.type === 'project' ? (
+                        <div className="space-y-1.5">
+                          <div className="flex justify-between items-center">
+                            <div className="flex items-center gap-4">
+                              <span className="font-bold text-[14px] text-zinc-900">{item.fields.name}</span>
+                              {item.fields.dept && <span className="text-[12px] text-zinc-600 font-medium">{item.fields.dept}</span>}
+                              <span className="text-[12px] text-zinc-800 font-bold">{item.fields.role}</span>
+                            </div>
+                            <span className="text-[11px] font-mono text-zinc-500">{item.fields.duration}</span>
+                          </div>
+                          
+                          {/* Content */}
+                          <div className="text-zinc-700" style={textStyle}>
+                            <div className="font-bold text-zinc-900 mb-0.5 mt-1">工作内容：</div>
+                            <div className="prose prose-sm max-w-none prose-zinc" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
+                              <ReactMarkdown>{item.fields.content || ''}</ReactMarkdown>
+                            </div>
+                          </div>
+
+                          {/* Performance */}
+                          {item.fields.performance && (
+                            <div className="text-zinc-700" style={textStyle}>
+                              <div className="font-bold text-zinc-900 mb-0.5 mt-1">工作业绩：</div>
+                              <div className="prose prose-sm max-w-none prose-zinc" style={{ fontSize: 'inherit', lineHeight: 'inherit' }}>
+                                <ReactMarkdown>{item.fields.performance}</ReactMarkdown>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ) : (
+                        <div className="text-zinc-700 prose prose-sm max-w-none prose-zinc" style={textStyle}>
+                          <ReactMarkdown>{item.fields.content || ''}</ReactMarkdown>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        
+        <div className="mt-12 pt-10 text-[9px] text-zinc-300 italic text-center no-print">
+          Design compliant with A4 printing standards
+        </div>
       </div>
     </div>
   );
-};
+});
+
+PreviewPanel.displayName = 'PreviewPanel';
 
 export default PreviewPanel;

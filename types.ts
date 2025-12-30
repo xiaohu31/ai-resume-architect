@@ -16,10 +16,18 @@ export interface Block {
   items: BlockItem[];
 }
 
+export interface ResumeSettings {
+  fontSize: number;
+  lineHeight: number;
+  modelName: string;
+  baseUrl: string;
+}
+
 export interface ResumeContent {
   id: string;
   title: string;
   blocks: Block[];
+  settings: ResumeSettings;
   createdAt: number;
   updatedAt: number;
 }
