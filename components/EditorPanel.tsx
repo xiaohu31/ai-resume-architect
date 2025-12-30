@@ -228,21 +228,85 @@ const SortableItem = ({
         <div className="p-6 bg-zinc-900/30">
           {activeBlock.type === 'personal' && (
             <>
-              <div className="grid grid-cols-2 gap-4">
-                {renderField('name', '姓名', '')}
-                {renderField('avatar', '头像 URL', 'https://...')}
+              {/* 头像上传与基本信息区域 */}
+              <div className="flex gap-6 mb-6">
+                <div className="flex-1 space-y-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    {renderField('name', '姓名', '请输入姓名')}
+                    {renderField('jobIntention', '求职意向', '例如：高级前端工程师')}
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-4">
+                    {renderField('phone', '手机号码', '138 0000 0000')}
+                    {renderField('email', '电子邮箱', 'example@email.com')}
+                  </div>
+
+                  <div className="grid grid-cols-3 gap-4">
+                    {renderField('wechat', '微信号', '', 'text')}
+                    {renderField('location', '所在城市', '例如：北京', 'text')}
+                    {renderField('yearsOfExperience', '工作经验', '例如：5年', 'text')}
+                  </div>
+                </div>
+
+                {/* 头像上传组件 */}
+                <div className="flex-none w-32">
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-1.5 px-1">头像 (Avatar)</label>
+                  <div className="relative group w-32 h-32 bg-zinc-800/50 border-2 border-dashed border-zinc-700 rounded-2xl overflow-hidden hover:border-blue-500/50 transition-all flex flex-col items-center justify-center cursor-pointer">
+                    {item.fields.avatar ? (
+                      <>
+                        <img src={item.fields.avatar} alt="Avatar" className="w-full h-full object-cover" />
+                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                          <span className="text-xs text-zinc-200 font-bold">更换图片</span>
+                          <button
+                            onClick={(e) => { e.stopPropagation(); updateBlockItemField(activeBlock.id, item.id, 'avatar', ''); }}
+                            className="px-2 py-1 bg-red-500/80 hover:bg-red-500 text-white text-[10px] rounded"
+                          >
+                            删除
+                          </button>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="text-center p-2">
+                        <Plus className="w-6 h-6 text-zinc-600 mx-auto mb-1 group-hover:text-blue-500 transition-colors" />
+                        <span className="text-[10px] text-zinc-500 group-hover:text-zinc-400">上传照片</span>
+                      </div>
+                    )}
+
+                    <input
+                      type="file"
+                      accept="image/*"
+                      className="absolute inset-0 opacity-0 cursor-pointer"
+                      onChange={(e) => {
+                        const file = e.target.files?.[0];
+                        if (file) {
+                          if (file.size > 2 * 1024 * 1024) {
+                            alert("图片大小不能超过 2MB");
+                            return;
+                          }
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            updateBlockItemField(activeBlock.id, item.id, 'avatar', reader.result as string);
+                          };
+                          reader.readAsDataURL(file);
+                        }
+                      }}
+                    />
+                  </div>
+                </div>
               </div>
-              {renderField('summary', '一行简述', '工作经验：5年 | 求职意向：Java高级开发工程师')}
-              <div className="grid grid-cols-3 gap-4">
-                {renderField('gender', '性别', '男')}
-                {renderField('age', '年龄', '27岁')}
-                {renderField('phone', '电话', '')}
+
+              <div className="grid grid-cols-3 gap-4 mb-4">
+                {renderField('age', '年龄', '例如：28岁')}
+                {renderField('gender', '性别', '男/女')}
+                {renderField('degree', '学历', '例如：本科')}
               </div>
-              <div className="grid grid-cols-3 gap-4">
-                {renderField('email', '邮箱', '')}
-                {renderField('wechat', '微信号', '')}
-                {renderField('github', 'GitHub', '')}
+
+              <div className="grid grid-cols-2 gap-4 mb-4">
+                {renderField('github', 'GitHub / 博客 / 作品集', 'https://github.com/...')}
+                {renderField('jobStatus', '求职状态', '例如：离职-随时到岗')}
               </div>
+
+              {renderField('summary', '个人优势 / 一行简述', '简要总结你的核心优势，例如：5年全栈开发经验...')}
             </>
           )}
 

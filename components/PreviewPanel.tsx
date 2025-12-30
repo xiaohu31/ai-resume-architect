@@ -2,7 +2,7 @@
 import React, { forwardRef } from 'react';
 import ReactMarkdown from 'react-markdown';
 import { useResumeStore } from '../store';
-import { Mail, Phone, User, MessageSquare, Github, Briefcase, GraduationCap, Award, FileText, Zap, AlertTriangle } from 'lucide-react';
+import { Mail, Phone, User, MessageSquare, Github, Briefcase, GraduationCap, Award, FileText, Zap, AlertTriangle, MapPin } from 'lucide-react';
 
 const blockIcons: Record<string, any> = {
   education: GraduationCap,
@@ -37,23 +37,33 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
 
       <div ref={ref} className="preview-a4 shadow-2xl rounded-sm print:shadow-none bg-white">
         {/* Centered Avatar and Name */}
+        {/* Centered Avatar and Name */}
         <div className="flex flex-col items-center mb-6">
           {personalInfo.avatar && (
-            <div className="w-20 h-20 mb-3 border border-zinc-200 overflow-hidden bg-zinc-50">
+            <div className="w-24 h-24 mb-4 border-2 border-zinc-100 rounded-full overflow-hidden bg-zinc-50 shadow-sm">
               <img src={personalInfo.avatar} alt="Avatar" className="w-full h-full object-cover" />
             </div>
           )}
-          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 mb-2">{personalInfo.name || '姓名'}</h1>
-          <p className="text-[12px] text-zinc-500 font-medium">{personalInfo.summary || '个人简述'}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-zinc-900 mb-1">{personalInfo.name || '姓名'}</h1>
+          {personalInfo.jobIntention && (
+            <div className="text-lg font-medium text-zinc-700 mb-2">{personalInfo.jobIntention}</div>
+          )}
+          <p className="text-[12px] text-zinc-500 font-medium px-12 text-center leading-relaxed">
+            {personalInfo.summary || '个人简述'}
+          </p>
         </div>
 
-        {/* 5-Column Contact Info */}
-        <div className="grid grid-cols-5 gap-1 mb-8 pb-4 border-b border-zinc-100 text-[11px] text-zinc-600">
-          <div className="flex items-center justify-center gap-1.5"><User className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.gender} | {personalInfo.age}</div>
-          <div className="flex items-center justify-center gap-1.5"><Phone className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.phone}</div>
-          <div className="flex items-center justify-center gap-1.5"><Mail className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.email}</div>
-          <div className="flex items-center justify-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.wechat}</div>
-          <div className="flex items-center justify-center gap-1.5"><Github className="w-3.5 h-3.5 text-zinc-800" /> {personalInfo.github}</div>
+        {/* Info Grid - Refactored for more fields */}
+        <div className="grid grid-cols-4 gap-y-2 gap-x-4 mb-8 pb-6 border-b border-zinc-100 text-[11px] text-zinc-600">
+          <div className="flex items-center justify-center gap-1.5"><User className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.gender} / {personalInfo.age}</div>
+          <div className="flex items-center justify-center gap-1.5"><Briefcase className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.yearsOfExperience}经验</div>
+          <div className="flex items-center justify-center gap-1.5"><MapPin className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.location}</div>
+          <div className="flex items-center justify-center gap-1.5"><Zap className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.jobStatus}</div>
+
+          <div className="flex items-center justify-center gap-1.5"><Phone className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.phone}</div>
+          <div className="flex items-center justify-center gap-1.5"><Mail className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.email}</div>
+          <div className="flex items-center justify-center gap-1.5"><MessageSquare className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.wechat}</div>
+          <div className="flex items-center justify-center gap-1.5"><Github className="w-3.5 h-3.5 text-zinc-400" /> {personalInfo.github}</div>
         </div>
 
         <div className="space-y-6">

@@ -61,6 +61,10 @@ const initialResume: ResumeContent = {
           fields: {
             name: '陈修齐',
             avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
+            jobIntention: '高级全栈工程师',
+            yearsOfExperience: '8年',
+            location: '深圳 / 杭州',
+            jobStatus: '在职-考虑机会',
             summary: '8年互联网大厂经验 | 深度参与高并发电商中台建设 | 擅长 React/Next.js 与 Node.js 微服务架构',
             gender: '男',
             age: '30岁',
