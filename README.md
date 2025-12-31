@@ -3,6 +3,8 @@
 
   <p>
     <b>隐私优先的 AI 简历构建神器｜集润色、扩展、诊断、导出于一体</b>
+    <br />
+    <a href="https://ara.yingluowu.com/"><strong>🌐 立即访问：ara.yingluowu.com</strong></a>
   </p>
 
   <p>
@@ -12,7 +14,10 @@
   </p>
 
   <p>
-    <b>AI Resume Architect</b> 是一款集成了 <b>Gemini/GPT</b> 智能驱动的现代化简历构建平台。通过 <b>STAR 法则</b> 深度诊断与字段级 AI 助手，助您快速产出极具专业竞争力的简历。项目坚持 <b>隐私优先</b>，所有数据均存储在本地浏览器，零后端依赖。
+    <b>AI Resume Architect</b> 是一款集成了 <b>Gemini 2.0 / GPT-4o</b> 智能驱动的现代化简历构建平台。通过 <b>STAR 法则</b> 深度诊断与字段级 AI 助手，助您快速产出极具专业竞争力的简历。项目坚持 <b>隐私优先</b>，所有数据均存储在本地浏览器，零后端依赖，支持本地离线运行。
+  </p>
+  <p>
+    <a href="https://ara.yingluowu.com/">立即体验 →</a>
   </p>
 </div>
 
