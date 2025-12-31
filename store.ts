@@ -9,21 +9,21 @@ import { arrayMove } from '@dnd-kit/sortable';
 
 const initialResume: ResumeContent = {
   id: uuidv4(),
-  title: '张志诚 - 高级产品专家 - 10年互联网经验',
+  title: '陈建国 - 资深全栈开发工程师 - 8年互联网经验',
   createdAt: Date.now(),
   updatedAt: Date.now(),
   settings: {
-    fontSize: 11,
-    lineHeight: 1.6,
-    modelName: 'gemini-2.0-flash',
+    fontSize: 15.5,
+    lineHeight: 1.1,
+    modelName: 'gemini-3-flash-preview',
     baseUrl: 'https://generativelanguage.googleapis.com',
     apiKey: '',
-    provider: 'gemini',
-    apiEndpoint: '',
+    provider: 'openai',
+    apiEndpoint: 'http://192.168.10.18:8317/v1',
     templateId: 'classic',
-    pagePadding: 15,
+    pagePadding: 10,
     fontFamily: '"Alibaba PuHuiTi 3.0", "Noto Sans SC", sans-serif',
-    moduleTitleSize: 18,
+    moduleTitleSize: 24,
   },
   blocks: [
     {
@@ -34,23 +34,22 @@ const initialResume: ResumeContent = {
       visible: true,
       items: [
         {
-          id: uuidv4(),
+          id: '3da7622f-68fe-4e0d-b58d-5c9ad0a921bb',
           fields: {
-            name: '张志诚',
+            name: '陈建国',
             avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-            jobIntention: '产品总监 / 资深产品专家',
-            yearsOfExperience: '10年',
-            location: '北京',
+            jobIntention: '资深全栈开发工程师 / 前端专家',
+            yearsOfExperience: '8年',
+            location: '上海',
             jobStatus: '离职-随时到岗',
-            summary: '10年互联网产品实战经验，先后供职于腾讯、字节跳动。深耕增长工具与商业化引擎，擅长通过数据驱动决策，曾主导 DAU 过亿级产品的核心功能迭代。具备极强的商业敏锐度与团队管理能力策略。',
+            summary: '8年全栈开发经验，前阿里巴巴（Ant Group）高级前端工程师。精通 React/Next.js 生态与 Node.js 异步编程。擅长攻克性能瓶颈，曾主导过百万级 QPS 系统的架构优化。高度关注代码质量与工程化建设，具备极强的模块化开发思维与大厂标准产出能力。',
             gender: '男',
-            age: '32岁',
-            birthday: '1992/05',
-            phone: '166-6666-6666',
-            email: 'chicheng_zhang@example.com',
-            wechat: 'chicheng_pm',
-            github: 'github.com/pm-zhang',
-            expectedSalary: '40-60k'
+            age: '30岁',
+            phone: '138-1234-5678',
+            email: 'jianguo.chen@tech.com',
+            wechat: 'jg_tech_dev',
+            github: 'github.com/jianguo-dev',
+            expectedSalary: '45-65k'
           },
           isExpanded: true
         }
@@ -64,28 +63,28 @@ const initialResume: ResumeContent = {
       visible: true,
       items: [
         {
-          id: uuidv4(),
+          id: '0bf4a0fa-a621-4edc-bcc8-e503366bcc50',
           fields: {
-            name: '字节跳动 (ByteDance)',
-            dept: '搜索策略组',
-            role: '资深产品经理 (2-2)',
-            duration: '2019.10 - 2023.12',
-            content: '1. **策略优化**: 负责抖音搜索推荐策略优化，通过引入知识图谱增强语义理解，搜索点击准确率提升了 12%。\n2. **产品迭代**: 主导“智能搜索提示”功能上线，日均 PV 增长 25%，搜索到播放的转化率提升 5%。\n3. **跨部门协同**: 联合算法、研发团队，通过 AB Test 验证了超过 50 个实验方案，沉淀了一套完整的搜索评价指标体系。',
-            performance: '- 荣获 2021 年度公司级“卓越个人奖”。\n- 带领 5 人产品小组，成功支撑了春晚红包项目期间的千万级搜索并发需求。'
+            name: '蚂蚁集团 (Ant Group)',
+            dept: '体验技术部 - 支付宝 core 业务组',
+            role: '高级全栈工程师 (P7)',
+            duration: '2019.06 - 2023.12',
+            content: '1. **架构升级**: 主导支付宝某核心收银台页面的微前端重构，通过模块化解耦，将研发交付周期从 2 周缩短至 3 天。\n2. **性能优化**: 针对 H5 容器进行首屏加载专项优化，利用预加载（Pre-render）与离线包技术，将首屏平均耗时从 1.8s 降低至 0.9s，转化率提升 4.5%。\n3. **组件库建设**: 负责业务线基础组件库的底层封装，支持 20+ 个业务子系统，沉淀 50+ 个原子化组件，代码复用率高达 75% 以上。',
+            performance: '- **卓越绩效表现：** 连续 3 年年度绩效考核位居全团队 **Top 10%（评级 S/3.75）**，在复杂业务迭代与核心系统稳定性保障中持续产出高质量技术方案，被评为部门年度“核心贡献者”。\n- **技术突破与创新：** 荣获蚂蚁集团**“技术突破奖”**。主导了针对分布式架构下高并发场景的**系统性能优化与链路重构**，通过引入多级缓存策略、异步化并行处理及 SQL 深度调优，将核心接口的**响应耗时（RT）降低了 45%**，单机 **QPS 吞吐能力提升 120%**。\n- **业务价值与影响力：** 沉淀出的通用优化方法论及技术组件被选树为 BU 级技术标杆，并**跨团队推广至全事业部 15+ 个核心业务模块**，显著提升了系统在高强度大促期间的稳定性，累计为公司**节省服务器计算资源成本逾 30%**。'
           },
           isExpanded: true
         },
         {
-          id: uuidv4(),
+          id: '374e5b06-c94c-4b99-a3a1-560f0e5d0b37',
           fields: {
-            name: '腾讯 (Tencent)',
-            dept: 'QQ 浏览器业务部',
-            role: '产品经理',
-            duration: '2014.07 - 2019.09',
-            content: '1. **内容生态**: 负责内容流推荐算法的初衷建设，建立了一套基于兴趣标签的池化管理机制（Pool System）。\n2. **工具效率**: 优化了浏览器内核的离线加载策略，提升首页秒开率 15%。',
-            performance: '- 该项目获得 BG 级技术突破奖。'
+            name: '美团 (Meituan)',
+            dept: '到店事业群 - 餐饮 SaaS 组',
+            role: '全栈开发工程师',
+            duration: '2016.07 - 2019.05',
+            content: '1. **服务端开发**: 使用 Node.js + NestJS 构建高并发订单中台，通过 Redis 缓存优化及 SQL 深度索引调优，支撑了支撑了日均千万级的流量高峰。\n2. **前端开发**: 负责 SaaS 系统商户端管理后台开发，引入 TypeScript 与自动化测试流程，将线上 Bug 率降低了 35%。',
+            performance: '年度绩效评定为 A（Top 10%）；作为核心负责人主导订单中台架构重构与性能攻坚，连续 3 年平稳支撑双十一大促峰值流量，成功应对 50w+ TPS 的高并发冲击，系统可用性达 99.99%，有力保障了业务从百万级向千万级日订单量的跨越式增长。'
           },
-          isExpanded: false
+          isExpanded: true
         }
       ]
     },
@@ -97,22 +96,22 @@ const initialResume: ResumeContent = {
       visible: true,
       items: [
         {
-          id: uuidv4(),
+          id: 'df58eb3d-7909-49d1-a9e2-028066853ff1',
           fields: {
-            school: '清华大学',
-            major: '计算机科学与技术',
+            school: '复旦大学',
+            major: '软件工程',
             degree: '硕士',
-            duration: '2012.09 - 2014.07'
+            duration: '2014.09 - 2016.07'
           },
           isExpanded: false
         },
         {
-          id: uuidv4(),
+          id: '3756c7b4-ae3b-4a94-b5a8-417a955e9dee',
           fields: {
-            school: '北京航空航天大学',
-            major: '信息工程',
+            school: '同济大学',
+            major: '计算机科学与技术',
             degree: '学士',
-            duration: '2008.09 - 2012.07'
+            duration: '2010.09 - 2014.07'
           },
           isExpanded: false
         }
@@ -126,13 +125,13 @@ const initialResume: ResumeContent = {
       visible: true,
       items: [
         {
-          id: uuidv4(),
+          id: '616fa2cb-d6ba-4c1d-99bd-1c77fb6c7278',
           fields: {
-            name: '企业级 AI 诊断系统',
-            role: '项目负责人',
-            duration: '2023.01 - 2023.10',
-            content: '基于 LLM 构建的企业级内部故障预测系统。使用 LangChain 框架整合公司内部 Wiki 与监控数据，实现故障毫秒级自动定位。',
-            performance: '- 降低了运维人力成本约 40%，月均减少 P0 故障修复时长 15 分钟。'
+            name: 'Low-Code 无代码研发平台',
+            role: '架构负责人',
+            duration: '2021.03 - 2022.12',
+            content: '从 0 到 1 主导了公司内无代码可视化页面搭建平台的架构设计。实现了拖拽即构建、一键生成 React/Vue 源码的核心能力，覆盖了公司内部 60% 的营销活动页、落地页场景。',
+            performance: '- 累计节省研发成本 500w+/年，赋能 200+ 名运营人员独立完成页面上线。'
           },
           isExpanded: true
         }
@@ -146,25 +145,25 @@ const initialResume: ResumeContent = {
       visible: true,
       items: [
         {
-          id: uuidv4(),
+          id: 'f2a36505-4852-4ba9-91ec-6e08d454e22e',
           fields: {
-            content: '- **产品能力**: 深厚的策略产品功底，擅长数据建模与增长实验。\n- **技术广度**: 熟悉 Python, SQL，能独立进行复杂数据探索分析。\n- **软技能**: 优秀的商业分析能力，能敏锐洞察行业趋势。'
+            content: '- **前端专功**: 精通 React 生态（Hooks, Context, Zustand），深入理解虚拟 DOM 与 Fiber 架构。\n- **全栈技术**: 熟练使用 Node.js, Golang, 扎实的并发编程与数据库设计能力。\n- **工程素养**: 深度实践 Webpack/Vite 打包链路优化，主张编写“整洁且可测试”的代码。\n- **领域专家**: 擅长微前端、可视化搭建系统及低功耗 H5 性能调优。'
           },
           isExpanded: true
         }
       ]
     },
     {
-      id: 'volunteer',
+      id: 'certificate',
       type: 'custom',
-      title: '社交主页',
+      title: '荣誉奖项',
       order: 5,
       visible: true,
       items: [
         {
-          id: uuidv4(),
+          id: '7d851cd9-c0fa-4fbd-a62c-da2f40b268bf',
           fields: {
-            content: 'www.linkedin.com/in/chicheng-zhang / www.zhangpm.com'
+            content: '- **第 15 届全国大学生数学竞赛**: 一等奖\n- **蚂蚁金服年度优秀员工**: 2021 年度\n- **个人专利**: 《一种基于 AST 的代码自动重构方法》 (CN102938...)'
           },
           isExpanded: true
         }

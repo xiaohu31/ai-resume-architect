@@ -14,7 +14,7 @@
   </p>
 
   <p>
-    <b>AI Resume Architect</b> 是一款集成了 <b>Gemini 2.0 / GPT-4o</b> 智能驱动的现代化简历构建平台。通过 <b>STAR 法则</b> 深度诊断与字段级 AI 助手，助您快速产出极具专业竞争力的简历。项目坚持 <b>隐私优先</b>，所有数据均存储在本地浏览器，零后端依赖，支持本地离线运行。
+    <b>AI Resume Architect</b> 是一款集成 <b>Gemini 3.0 / 兼容 OpenAI 协议 (DeepSeek 等)</b> 智能驱动的现代化简历构建平台。通过 <b>STAR 法则</b> 深度诊断与字段级 AI 助手，助您快速产出极具专业竞争力的简历。项目坚持 <b>隐私优先</b>，所有数据均存储在本地浏览器，零后端依赖，支持本地离线运行。
   </p>
   <p>
     <a href="https://ara.yingluowu.com/">立即体验 →</a>
@@ -23,11 +23,12 @@
 
 ---
 
+
 ## 🌟 项目简介 (Introduction)
 
 **AI Resume Architect** 是一款基于 React 19 和 Vite 6 构建的高性能 Web 应用。它兼具了编辑器的灵活性与 AI 的深度优化能力，旨在解决“简历内容空洞”、“排版困难”和“隐私泄露”三大痛点。
 
-> **GitHub Search Optimized Keywords:** AI Resume Builder, Resume Generator, Gemini Resume Advisor, Smart Resume Editor, Privacy-First Resume, React PDF Export, STAR Method Resume, Career Assistant.
+> **GitHub Search Optimized Keywords:** AI Resume Builder, Resume Generator, DeepSeek Resume, Gemini Resume Advisor, Smart Resume Editor, Privacy-First Resume, React PDF Export, STAR Method Resume, Career Assistant, Job Hunting Tool, ATS Resume Optimizer, Resume Diagnosis, Professional Resume Template, Career Growth, Open Source Resume, 简历制作, 简历编写, 简历排版, 个人简历, 求职助手, 在线简历, 简历生成.
 
 ---
 
@@ -70,7 +71,7 @@
 | **状态管理** | Zustand (Persistent) + Zundo (Undo/Redo) |
 | **样式** | Tailwind CSS (Dark Mode Support) |
 | **存储** | IndexedDB (Powered by Dexie.js) |
-| **AI 模型** | Gemini 2.0 Flash / OpenAI GPT-4o / 自定义 API |
+| **AI 模型** | Gemini 3.0 Flash / OpenAI 兼容协议 (DeepSeek / Claude 等) |
 | **拖拽** | @dnd-kit |
 | **图标** | Lucide React |
 
@@ -78,11 +79,21 @@
 
 ## 🚀 快速开始
 
-### 前置要求
-- Node.js (v18+)
-- npm 或 pnpm
+### ☁️ 一键部署 (Vercel)
 
-### 本地部署
+本项目已经过优化，支持在 Vercel 上实现秒级自动化部署：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fxiaohu31%2Fai-resume-architect)
+
+**部署步骤：**
+1. 点击上方的 **Deploy with Vercel** 按钮。
+2. 按照 Vercel 提示连接您的 GitHub 仓库（完全免费）。
+3. 部署完成后即可访问您的专属简历工具。
+4. **AI 配置**：在应用界面的 **⚙️ 设置** 中填入您自己的 API Key。
+
+### 💻 本地开发
+
+如果您希望在本地运行或进行二次开发，请按照以下步骤操作：
 
 1. **克隆仓库**
    ```bash
@@ -95,32 +106,15 @@
    npm install
    ```
 
-3. **配置环境变量**
-   在根目录创建 `.env.local` 文件并添加：
-   ```env
-   VITE_GEMINI_API_KEY=你的GeminiKey
-   # 或在应用内的“设置”界面直接配置
-   ```
-
-4. **启动开发服务器**
+3. **启动开发服务器**
    ```bash
    npm run dev
    ```
 
-5. **浏览器访问**
-   打开 `http://localhost:3000` 开始制作。
+4. **浏览器访问**
+   打开 [http://localhost:3000](http://localhost:3000) 即可开始制作。
 
-### Vercel 部署
-
-本项目支持在 Vercel 上一键部署：
-
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fxiaohu31%2Fai-resume-architect&env=VITE_GEMINI_API_KEY)
-
-**部署步骤：**
-1. 点击上方的“Deploy with Vercel”按钮。
-2. 按照提示连接 GitHub 仓库。
-3. 在环境变量中添加 `VITE_GEMINI_API_KEY`（可选，也可以在应用内设置）。
-4. 部署完成后即可访问你的专属简历工具。
+   *(注：本项目无需配置任何环境变量，所有设置均在应用内完成。)*
 
 ---
 
@@ -136,6 +130,17 @@
 ## 🔒 隐私承诺
 
 我们郑重承诺：您的所有简历数据（包括姓名、电话、教育背景等）仅存储在您本地浏览器的 **IndexedDB** 数据库中。除非您主动点击 AI 优化功能（此时会向 AI 服务商发送当前描述文本），否则任何数据都不会离开您的设备。
+
+---
+
+## 🛡️ 安全与隐私说明 (Security & Privacy)
+
+本项目采用 **客户端加密存储** 方案：
+- **API Key 安全**：您的 API Key 仅保存在浏览器本地的 `localStorage` 或 `IndexedDB` 中。我们**不会**也**无法**在服务器端获取您的 Key。
+- **防止泄露建议**：
+  - 请勿在公共电脑上保存您的 API Key。
+  - 建议为 AI 服务设置使用额度限制，以防 Key 意外泄漏导致的资费风险。
+  - 本项目已移除构建过程中的 Key 注入机制，生产环境版本纯净安全。
 
 ---
 

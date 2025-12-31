@@ -6,9 +6,8 @@ import { useResumeStore } from "./store";
 // ==================== 配置获取 ====================
 
 const getApiKey = (): string => {
-    // @ts-ignore
-    const envKey = process.env.GEMINI_API_KEY || '';
-    if (envKey) return envKey;
+    // 安全策略：生产环境不建议使用 process.env 硬编码 Key
+    // 优先从存储中获取用户配置的 Key，确保隐私与安全
     return useResumeStore.getState().resume?.settings?.apiKey || '';
 };
 

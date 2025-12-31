@@ -9,10 +9,7 @@ const SettingsModal: React.FC = () => {
 
   if (!isSettingsOpen) return null;
 
-  // 检查环境变量是否有 API Key
-  // @ts-ignore - Vite 在构建时会替换这个值
-  const envApiKey = process.env.GEMINI_API_KEY || '';
-  const hasEnvKey = !!envApiKey;
+
 
   return (
     <div className="fixed inset-0 bg-black/90 backdrop-blur-md z-[300] flex items-center justify-center p-6 animate-in fade-in">
@@ -75,26 +72,26 @@ const SettingsModal: React.FC = () => {
                   className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all font-mono"
                   value={resume.settings.modelName}
                   onChange={(e) => updateSettings({ modelName: e.target.value })}
-                  placeholder={(resume.settings.provider || 'gemini') === 'gemini' ? 'gemini-2.0-flash' : 'gpt-4o-mini'}
+                  placeholder={(resume.settings.provider || 'gemini') === 'gemini' ? 'gemini-3.0-flash' : 'o1-preview'}
                 />
                 <p className="text-[10px] text-zinc-600 mt-2 px-1">
                   {(resume.settings.provider || 'gemini') === 'gemini'
-                    ? '支持：gemini-2.0-flash、gemini-1.5-pro 等'
-                    : '支持：gpt-4o-mini、gpt-3.5-turbo、deepseek-chat 等'}
+                    ? '支持：gemini-3.0-flash、gemini-1.5-pro 等'
+                    : '支持：o1-mini、o1-preview、deepseek-chat 等'}
                 </p>
               </div>
 
               {/* 自定义端点（仅OpenAI） */}
               {resume.settings.provider === 'openai' && (
                 <div>
-                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-1">API 端点 (Custom Endpoint) <span className="text-zinc-600">- 可选</span></label>
+                  <label className="block text-[10px] font-bold text-zinc-500 uppercase tracking-widest mb-2 px-1">API 端点 (Base URL) <span className="text-zinc-600">- 可选</span></label>
                   <input
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 text-sm focus:border-blue-500 outline-none transition-all font-mono"
                     value={resume.settings.apiEndpoint || ''}
                     onChange={(e) => updateSettings({ apiEndpoint: e.target.value })}
-                    placeholder="https://api.openai.com/v1 或第三方兼容服务"
+                    placeholder="https://api.deepseek.com/v1 或其他 API 地址"
                   />
-                  <p className="text-[10px] text-zinc-600 mt-2 px-1">留空使用默认 OpenAI 端点；填写时支持 DeepSeek、Claude 等第三方服务</p>
+                  <p className="text-[10px] text-zinc-600 mt-2 px-1">支持 DeepSeek, Claude, DeepL 等所有兼容 OpenAI 格式的服务商</p>
                 </div>
               )}
 
@@ -102,9 +99,6 @@ const SettingsModal: React.FC = () => {
                 <div className="flex items-center gap-2 mb-3">
                   <Key className="w-4 h-4 text-emerald-400" />
                   <span className="text-xs text-zinc-400">API 密钥</span>
-                  {hasEnvKey && (
-                    <span className="text-[9px] bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded-full font-bold">环境变量已配置</span>
-                  )}
                 </div>
                 <div className="relative">
                   <input
@@ -112,7 +106,7 @@ const SettingsModal: React.FC = () => {
                     className="w-full bg-zinc-950 border border-zinc-800 rounded-xl px-4 py-3 pr-12 text-sm focus:border-blue-500 outline-none transition-all font-mono"
                     value={resume.settings.apiKey || ''}
                     onChange={(e) => updateSettings({ apiKey: e.target.value })}
-                    placeholder={hasEnvKey ? '已使用环境变量密钥' : '输入你的 Gemini API Key'}
+                    placeholder="输入你的 API Key (Gemini / DeepSeek 等)"
                   />
                   <button
                     type="button"
@@ -122,7 +116,7 @@ const SettingsModal: React.FC = () => {
                     {showApiKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
-                <p className="text-[10px] text-zinc-500 mt-2 px-1">优先级：环境变量 GEMINI_API_KEY &gt; 此处输入的密钥</p>
+
               </div>
             </div>
           </section>
