@@ -203,14 +203,10 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
                 {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <TrendingUp className="w-3 h-3" />}
                 {loading ? steps[loadingStep] : 'AI 优化建议'}
               </span>
-              <span className="text-[10px] font-black text-blue-400 uppercase tracking-widest flex items-center gap-2">
-                {loading ? <Loader2 className="w-3 h-3 animate-spin" /> : <TrendingUp className="w-3 h-3" />}
-                {loading ? steps[loadingStep] : 'AI 优化建议'}
-              </span>
               {!loading && (
                 <button
                   onClick={() => { setSuggestion(''); setError(null); }}
-                  className="text-zinc-500 hover:text-zinc-200"
+                  className="text-zinc-500 hover:text-zinc-200 p-1 hover:bg-zinc-800 rounded-md transition-all"
                 >
                   <X className="w-4 h-4" />
                 </button>
