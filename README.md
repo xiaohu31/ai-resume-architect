@@ -105,6 +105,18 @@
 5. **浏览器访问**
    打开 `http://localhost:5173` 开始制作。
 
+### Vercel 部署
+
+本项目支持在 Vercel 上一键部署：
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fxiaohu31%2Fresume-build&env=VITE_GEMINI_API_KEY)
+
+**部署步骤：**
+1. 点击上方的“Deploy with Vercel”按钮。
+2. 按照提示连接 GitHub 仓库。
+3. 在环境变量中添加 `VITE_GEMINI_API_KEY`（可选，也可以在应用内设置）。
+4. 部署完成后即可访问你的专属简历工具。
+
 ---
 
 ## 💡 使用建议
