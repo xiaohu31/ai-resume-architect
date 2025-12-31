@@ -55,7 +55,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
 
             {/* Content Sections */}
             <div className="space-y-6">
-                {resume.blocks.filter(b => b.visible && b.type !== 'personal').sort((a, b) => a.order - b.order).map((block) => {
+                {resume.blocks.filter(b => b.visible && b.type !== 'personal').map((block) => {
                     return (
                         <div key={block.id} className="relative page-break-avoid">
                             {/* Simple Minimal Title */}

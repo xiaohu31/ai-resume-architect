@@ -250,10 +250,15 @@ export const useResumeStore = create<ResumeState>()(
         reorderBlocks: (activeId, overId) => set((state) => {
           const oldIndex = state.resume.blocks.findIndex(b => b.id === activeId);
           const newIndex = state.resume.blocks.findIndex(b => b.id === overId);
+
+          if (oldIndex === -1 || newIndex === -1) return state;
+
+          const newBlocks = arrayMove(state.resume.blocks, oldIndex, newIndex).map((b, i) => ({ ...b, order: i }));
+
           return {
             resume: {
               ...state.resume,
-              blocks: arrayMove(state.resume.blocks, oldIndex, newIndex).map((b, i) => ({ ...b, order: i })),
+              blocks: newBlocks,
               updatedAt: Date.now()
             }
           };

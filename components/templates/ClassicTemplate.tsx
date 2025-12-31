@@ -68,7 +68,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                     </div>
                 )}
 
-                {resume.blocks.filter(b => b.visible && b.type !== 'personal').sort((a, b) => a.order - b.order).map((block) => {
+                {resume.blocks.filter(b => b.visible && b.type !== 'personal').map((block) => {
                     return (
                         <div key={block.id} className="relative page-break-avoid">
                             {/* Section Header with Line */}

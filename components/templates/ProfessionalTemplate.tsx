@@ -68,8 +68,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                     </div>
                 </div>
 
-                {/* Sidebar blocks (Skills, Education etc) */}
-                {sideBlocks.sort((a, b) => a.order - b.order).map(block => (
+                {sideBlocks.map(block => (
                     <div key={block.id} className="space-y-2 page-break-avoid">
                         <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 border-b border-zinc-800 pb-1.5">{block.title}</h3>
                         <div className="text-[10px] leading-relaxed text-zinc-300">
@@ -111,7 +110,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                 )}
 
                 <div className="space-y-6">
-                    {mainBlocks.sort((a, b) => a.order - b.order).map(block => (
+                    {mainBlocks.map(block => (
                         <div key={block.id} className="page-break-avoid">
                             <h2 className="text-[10px] font-bold text-zinc-300 uppercase tracking-[0.15em] mb-4 flex items-center gap-3">
                                 {block.title}
