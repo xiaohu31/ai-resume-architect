@@ -21,6 +21,7 @@ const initialResume: ResumeContent = {
     provider: 'gemini',
     apiEndpoint: '',
     templateId: 'classic',
+    pagePadding: 15,
   },
   blocks: [
     {

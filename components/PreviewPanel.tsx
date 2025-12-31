@@ -13,7 +13,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
 
   return (
     <div className="relative group/preview">
-      <div ref={ref} className="preview-a4 shadow-2xl rounded-sm print:shadow-none bg-white">
+      <div ref={ref} className="preview-a4 shadow-2xl rounded-sm print:shadow-none bg-white" style={{ padding: `${resume.settings.pagePadding || 15}mm` }}>
         <Template
           resume={resume}
           style={{

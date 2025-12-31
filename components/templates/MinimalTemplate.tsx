@@ -19,7 +19,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     };
 
     return (
-        <div className="p-6 text-zinc-800">
+        <div className="text-zinc-800">
             {/* Header Area */}
             <div className="flex justify-between items-start mb-6 page-break-avoid">
                 <div className="flex-1">
@@ -40,7 +40,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                     </div>
                 </div>
                 {personalInfo.avatar && (
-                    <div className="w-16 h-16 rounded-full overflow-hidden grayscale contrast-125 border border-zinc-100 shadow-sm ml-6">
+                    <div className="w-16 h-16 rounded-full overflow-hidden border border-zinc-100 shadow-sm ml-6">
                         <img src={personalInfo.avatar} alt="Avatar" className="w-full h-full object-cover" />
                     </div>
                 )}

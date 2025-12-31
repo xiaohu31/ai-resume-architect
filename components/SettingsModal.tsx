@@ -126,41 +126,6 @@ const SettingsModal: React.FC = () => {
               </div>
             </div>
           </section>
-
-          {/* Appearance Section */}
-          <section className="space-y-6">
-            <div className="flex items-center gap-2 mb-2">
-              <Palette className="w-5 h-5 text-emerald-400" />
-              <h3 className="text-sm font-bold text-zinc-300 uppercase tracking-widest">外观排版</h3>
-            </div>
-
-            <div className="grid grid-cols-2 gap-8 bg-zinc-800/20 p-6 rounded-2xl border border-zinc-800/50">
-              <div>
-                <div className="flex justify-between items-center mb-4 px-1">
-                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">字体大小</label>
-                  <span className="text-xs font-mono text-blue-400">{resume.settings.fontSize}px</span>
-                </div>
-                <input
-                  type="range" min="10" max="16" step="0.5"
-                  value={resume.settings.fontSize}
-                  onChange={(e) => updateSettings({ fontSize: parseFloat(e.target.value) })}
-                  className="w-full accent-blue-500 bg-zinc-950 rounded-lg h-1.5 appearance-none cursor-pointer"
-                />
-              </div>
-              <div>
-                <div className="flex justify-between items-center mb-4 px-1">
-                  <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">行间距</label>
-                  <span className="text-xs font-mono text-emerald-400">{resume.settings.lineHeight}</span>
-                </div>
-                <input
-                  type="range" min="1" max="2.5" step="0.1"
-                  value={resume.settings.lineHeight}
-                  onChange={(e) => updateSettings({ lineHeight: parseFloat(e.target.value) })}
-                  className="w-full accent-emerald-500 bg-zinc-950 rounded-lg h-1.5 appearance-none cursor-pointer"
-                />
-              </div>
-            </div>
-          </section>
         </div>
 
         <div className="p-6 border-t border-zinc-800 bg-zinc-900/50 flex justify-between items-center">
@@ -181,7 +146,7 @@ const SettingsModal: React.FC = () => {
           </button>
         </div>
       </div>
-    </div>
+    </div >
   );
 };
 

@@ -1,6 +1,6 @@
 
 import React, { useState, useRef, useEffect } from 'react';
-import { Palette, X, Type, AlignJustify, Layout } from 'lucide-react';
+import { Palette, X, Type, AlignJustify, Layout, Maximize } from 'lucide-react';
 import { useResumeStore } from '../store';
 import { templateRegistry } from './templates';
 
@@ -16,6 +16,7 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
     const currentTemplateId = resume?.settings?.templateId || 'classic';
     const fontSize = resume?.settings?.fontSize || 11;
     const lineHeight = resume?.settings?.lineHeight || 1.6;
+    const pagePadding = resume?.settings?.pagePadding || 15;
 
     // 点击外部关闭
     useEffect(() => {
@@ -82,16 +83,16 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     </div>
                     <input
                         type="range"
-                        min="9"
-                        max="14"
+                        min="8"
+                        max="18"
                         step="0.5"
                         value={fontSize}
                         onChange={(e) => updateSettings({ fontSize: parseFloat(e.target.value) })}
                         className="w-full h-1.5 bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-500"
                     />
                     <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
-                        <span>9px</span>
-                        <span>14px</span>
+                        <span>8px</span>
+                        <span>18px</span>
                     </div>
                 </div>
 
@@ -106,16 +107,40 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     </div>
                     <input
                         type="range"
-                        min="1.2"
-                        max="2.0"
+                        min="1.0"
+                        max="3.0"
                         step="0.1"
                         value={lineHeight}
                         onChange={(e) => updateSettings({ lineHeight: parseFloat(e.target.value) })}
                         className="w-full h-1.5 bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-500"
                     />
                     <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
-                        <span>紧凑</span>
-                        <span>宽松</span>
+                        <span>紧凑 (1.0)</span>
+                        <span>宽松 (3.0)</span>
+                    </div>
+                </div>
+
+                {/* 页边距 */}
+                <div>
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2 text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                            <Maximize className="w-3.5 h-3.5" />
+                            页边距
+                        </div>
+                        <span className="text-xs font-mono text-zinc-500">{pagePadding}mm</span>
+                    </div>
+                    <input
+                        type="range"
+                        min="5"
+                        max="30"
+                        step="1"
+                        value={pagePadding}
+                        onChange={(e) => updateSettings({ pagePadding: parseInt(e.target.value) })}
+                        className="w-full h-1.5 bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-500"
+                    />
+                    <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
+                        <span>极窄 (5)</span>
+                        <span>极宽 (30)</span>
                     </div>
                 </div>
             </div>

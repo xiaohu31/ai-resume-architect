@@ -25,6 +25,7 @@ export interface ResumeSettings {
   provider?: 'gemini' | 'openai';
   apiEndpoint?: string;
   templateId: 'classic' | 'minimal' | 'professional';
+  pagePadding: number;
 }
 
 export interface ResumeContent {

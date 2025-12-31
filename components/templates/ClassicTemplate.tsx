@@ -19,7 +19,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     };
 
     return (
-        <div className="p-2 text-zinc-900">
+        <div className="text-zinc-900">
             {/* Header: Left info, Right Avatar */}
             <div className="flex justify-between items-start mb-6 page-break-avoid">
                 <div className="flex-1">

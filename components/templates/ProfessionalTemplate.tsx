@@ -22,7 +22,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     const mainBlocks = resume.blocks.filter(b => b.visible && ['work', 'project', 'custom'].includes(b.type) && b.type !== 'personal');
 
     return (
-        <div className="flex bg-white" style={{ minHeight: '297mm' }}>
+        <div className="flex bg-white">
             {/* Sidebar (Left) */}
             <div className="w-[220px] bg-zinc-900 text-white p-6 flex flex-col gap-5 shrink-0">
                 {/* Avatar & Basic Info */}
@@ -38,7 +38,7 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
 
                 {/* Contact info list */}
                 <div className="space-y-3 pt-3 page-break-avoid">
-                    <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 border-b border-zinc-800 pb-1.5 mb-3">Contact</h3>
+                    <h3 className="text-[10px] font-bold uppercase tracking-[0.15em] text-zinc-500 border-b border-zinc-800 pb-1.5 mb-3">联系方式</h3>
                     <div className="space-y-2 text-[10px] text-zinc-300">
                         <div className="flex items-start gap-2"><Phone className="w-3 h-3 mt-0.5 text-zinc-500" /> <span>{personalInfo.phone}</span></div>
                         <div className="flex items-start gap-2"><Mail className="w-3 h-3 mt-0.5 text-zinc-500" /> <span className="break-all">{personalInfo.email}</span></div>
@@ -48,19 +48,19 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                         <div className="pt-2 border-t border-zinc-800 space-y-1.5 opacity-80">
                             {(personalInfo.gender || personalInfo.age || personalInfo.birthday) && (
                                 <div className="flex items-center gap-2">
-                                    <span className="text-zinc-500">Info:</span>
+                                    <span className="text-zinc-500">基本信息:</span>
                                     <span>{personalInfo.gender} / {personalInfo.birthday || personalInfo.age}</span>
                                 </div>
                             )}
                             {personalInfo.jobStatus && (
                                 <div className="flex items-center gap-2">
-                                    <span className="text-zinc-500">Status:</span>
+                                    <span className="text-zinc-500">求职状态:</span>
                                     <span>{personalInfo.jobStatus}</span>
                                 </div>
                             )}
                             {personalInfo.expectedSalary && (
                                 <div className="flex items-center gap-2 text-blue-400 font-bold">
-                                    <span className="text-zinc-500">Salary:</span>
+                                    <span className="text-zinc-500">期望薪资:</span>
                                     <span>{personalInfo.expectedSalary}</span>
                                 </div>
                             )}
@@ -98,11 +98,11 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
             </div>
 
             {/* Main Content (Right) */}
-            <div className="flex-1 p-6 pr-8 text-zinc-900 bg-white">
+            <div className="flex-1 p-8 text-zinc-900 bg-white">
                 {/* Intro Summary in Main */}
                 {personalInfo.summary && (
                     <div className="mb-6 page-break-avoid">
-                        <h2 className="text-[10px] font-bold text-zinc-300 uppercase tracking-[0.15em] mb-2">About Me</h2>
+                        <h2 className="text-[10px] font-bold text-zinc-300 uppercase tracking-[0.15em] mb-2">个人优势</h2>
                         <p className="text-xs font-medium text-zinc-700 leading-relaxed border-l-4 border-zinc-100 pl-4 py-1">
                             {personalInfo.summary}
                         </p>
