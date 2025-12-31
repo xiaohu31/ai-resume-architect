@@ -61,7 +61,7 @@
 
 | 类别 | 技术 |
 | :--- | :--- |
-| **框架** | React 19 + Next.js 16 (Hybrid) / Vite 6 |
+| **框架** | React 19 + Vite 6 |
 | **状态管理** | Zustand (Persistent) + Zundo (Undo/Redo) |
 | **样式** | Tailwind CSS (Dark Mode Support) |
 | **存储** | IndexedDB (Powered by Dexie.js) |

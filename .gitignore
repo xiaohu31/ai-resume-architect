@@ -29,3 +29,5 @@ docs/plans/image-1.png
 docs/plans/image.png
 docs/plans/todo.md
 .claude/settings.local.json
+.vercel
+.env*.local
