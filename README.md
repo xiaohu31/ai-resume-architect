@@ -6,9 +6,9 @@
   </p>
 
   <p>
-    <a href="https://github.com/xiaohu31/resume-build/stargazers"><img src="https://img.shields.io/github/stars/xiaohu31/resume-build?style=flat-square" alt="stars"></a>
-    <a href="https://github.com/xiaohu31/resume-build/network/members"><img src="https://img.shields.io/github/forks/xiaohu31/resume-build?style=flat-square" alt="forks"></a>
-    <a href="https://github.com/xiaohu31/resume-build/blob/main/LICENSE"><img src="https://img.shields.io/github/license/xiaohu31/resume-build?style=flat-square" alt="license"></a>
+    <a href="https://github.com/xiaohu31/ai-resume-architect/stargazers"><img src="https://img.shields.io/github/stars/xiaohu31/ai-resume-architect?style=flat-square" alt="stars"></a>
+    <a href="https://github.com/xiaohu31/ai-resume-architect/network/members"><img src="https://img.shields.io/github/forks/xiaohu31/ai-resume-architect?style=flat-square" alt="forks"></a>
+    <a href="https://github.com/xiaohu31/ai-resume-architect/blob/main/LICENSE"><img src="https://img.shields.io/github/license/xiaohu31/ai-resume-architect?style=flat-square" alt="license"></a>
   </p>
 
   <p>
@@ -81,8 +81,8 @@
 
 1. **克隆仓库**
    ```bash
-   git clone https://github.com/xiaohu31/resume-build.git
-   cd resume-build
+   git clone https://github.com/xiaohu31/ai-resume-architect.git
+   cd ai-resume-architect
    ```
 
 2. **安装依赖**
@@ -103,13 +103,13 @@
    ```
 
 5. **浏览器访问**
-   打开 `http://localhost:5173` 开始制作。
+   打开 `http://localhost:3000` 开始制作。
 
 ### Vercel 部署
 
 本项目支持在 Vercel 上一键部署：
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fxiaohu31%2Fresume-build&env=VITE_GEMINI_API_KEY)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fxiaohu31%2Fai-resume-architect&env=VITE_GEMINI_API_KEY)
 
 **部署步骤：**
 1. 点击上方的“Deploy with Vercel”按钮。
