@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Sparkles, Wand2, Check, X, Loader2, Zap, Copy, RefreshCcw, Scissors, MessageSquare, AlertCircle, TrendingUp, List, ListOrdered } from 'lucide-react';
+import { useResumeStore } from '../store';
+import { Sparkles, Wand2, Check, X, Loader2, Zap, Copy, RefreshCcw, Scissors, MessageSquare, AlertCircle, TrendingUp, List, ListOrdered, Settings } from 'lucide-react';
 import { polishText, expandText, simplifyText, summarizeText } from '../aiService';
 
 interface FieldAIAssistantProps {
@@ -13,10 +14,11 @@ interface FieldAIAssistantProps {
 }
 
 const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, label, placeholder, blockId, itemId, field }) => {
+  const { setSettingsOpen } = useResumeStore();
   const [suggestion, setSuggestion] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingStep, setLoadingStep] = useState(0);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<any>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const steps = ["分析上下文...", "挖掘技能点...", "对齐 STAR 法则...", "精雕细琢表达..."];
@@ -40,12 +42,12 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
     try {
       let result = '';
       switch (action) {
-        case 'polish': result = await polishText(value); break;
-        case 'expand': result = await expandText(value); break;
+        case 'polish': result = await polishText(value, label); break;
+        case 'expand': result = await expandText(value, label); break;
       }
       setSuggestion(result);
     } catch (err: any) {
-      setError(err.message || "服务异常");
+      setError(err);
     } finally {
       setLoading(false);
     }
@@ -163,6 +165,7 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
           data-block={blockId}
           data-item={itemId}
           data-field={field}
+          data-label={label}
           onChange={(e) => onApply(e.target.value)}
         />
 
@@ -211,7 +214,20 @@ const FieldAIAssistant: React.FC<FieldAIAssistantProps> = ({ value, onApply, lab
                   <div className="h-3 bg-blue-500/10 rounded w-4/5 animate-pulse"></div>
                 </div>
               ) : error ? (
-                <div className="text-xs text-red-400 font-bold">{error}</div>
+                <div className="flex flex-col gap-2">
+                  <div className="text-xs text-red-400 font-bold flex items-center gap-1.5">
+                    <AlertCircle className="w-3.5 h-3.5" />
+                    {error.name === 'AIConfigurationError' ? '请先配置 AI Key' : (error.message || "服务异常")}
+                  </div>
+                  {error.name === 'AIConfigurationError' && (
+                    <button
+                      onClick={() => setSettingsOpen(true)}
+                      className="text-[10px] bg-red-500/10 hover:bg-red-500/20 text-red-400 px-3 py-1.5 rounded-lg border border-red-500/20 transition-all font-bold flex items-center justify-center gap-1"
+                    >
+                      <Settings className="w-3 h-3" /> 去配置
+                    </button>
+                  )}
+                </div>
               ) : (
                 <div className="space-y-4">
                   <div className="text-sm text-zinc-200 leading-relaxed font-medium bg-zinc-950/40 p-4 rounded-xl border border-zinc-800/50">

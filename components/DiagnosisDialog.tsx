@@ -96,25 +96,28 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemFie
 };
 
 const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-    const { resume, updateBlockItemField } = useResumeStore();
+    const { resume, updateBlockItemField, setSettingsOpen } = useResumeStore();
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState<DiagnosisResult | null>(null);
+    const [error, setError] = useState<any>(null);
+
+    const runDiagnosis = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await diagnoseResume(resume);
+            setResult(data);
+        } catch (e: any) {
+            console.error(e);
+            setError(e);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     useEffect(() => {
-        const runDiagnosis = async () => {
-            try {
-                const data = await diagnoseResume(resume);
-                setResult(data);
-            } catch (e) {
-                console.error(e);
-                alert("诊断失败，请重试");
-                onClose();
-            } finally {
-                setLoading(false);
-            }
-        };
         runDiagnosis();
-    }, [resume, onClose]);
+    }, [resume]);
 
     const ScoreBar = ({ label, score, color }: { label: string, score: number, color: string }) => (
         <div className="space-y-2">
@@ -156,6 +159,46 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                         <div className="text-center">
                             <p className="text-lg font-bold text-zinc-200 animate-pulse">正在深度分析您的简历...</p>
                             <p className="text-sm text-zinc-500 mt-2">分析维度：完整性、STAR 法则、量化程度、表达质量</p>
+                        </div>
+                    </div>
+                ) : error ? (
+                    <div className="flex-1 flex flex-col items-center justify-center gap-6">
+                        <div className="w-20 h-20 bg-red-500/20 rounded-full flex items-center justify-center">
+                            <ShieldAlert className="w-10 h-10 text-red-500" />
+                        </div>
+                        <div className="text-center max-w-md">
+                            <h3 className="text-xl font-bold text-zinc-200 mb-2">
+                                {error.name === 'AIConfigurationError' ? 'AI 配置缺失' : '诊断服务异常'}
+                            </h3>
+                            <p className="text-sm text-zinc-500 mb-6">
+                                {error.name === 'AIConfigurationError'
+                                    ? '请先配置 API Key 才能使用智能诊断服务'
+                                    : (error.message || 'AI 服务暂时不可用，请稍后再试')}
+                            </p>
+
+                            <div className="flex gap-4 justify-center">
+                                {error.name === 'AIConfigurationError' ? (
+                                    <button
+                                        onClick={() => { onClose(); setSettingsOpen(true); }}
+                                        className="px-6 py-2 bg-blue-600 hover:bg-blue-500 text-white rounded-xl text-sm font-bold transition-all shadow-lg shadow-blue-600/20"
+                                    >
+                                        前往配置
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={runDiagnosis}
+                                        className="px-6 py-2 bg-zinc-800 hover:bg-zinc-700 text-zinc-200 rounded-xl text-sm font-bold transition-all"
+                                    >
+                                        重试
+                                    </button>
+                                )}
+                                <button
+                                    onClick={onClose}
+                                    className="px-6 py-2 border border-zinc-800 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded-xl text-sm font-bold transition-all"
+                                >
+                                    关闭
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ) : result && (

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useResumeStore } from '../store';
-import { Sparkles, Check, X, Loader2, Zap, RefreshCcw, Trash2, Bold, Italic } from 'lucide-react';
+import { Sparkles, Check, X, Loader2, Zap, RefreshCcw, Trash2, Bold, Italic, AlertCircle, Settings } from 'lucide-react';
 import { polishText, expandText } from '../aiService';
 import {
   useFloating,
@@ -18,12 +18,13 @@ const AIToolbar: React.FC = () => {
     start: 0,
     end: 0
   });
-  const [mode, setMode] = useState<'toolbar' | 'loading' | 'suggestion'>('toolbar');
+  const [mode, setMode] = useState<'toolbar' | 'loading' | 'suggestion' | 'error'>('toolbar');
   const [aiSuggestion, setAiSuggestion] = useState('');
+  const [error, setError] = useState<any>(null);
   const [visible, setVisible] = useState(false);
   const arrowRef = useRef(null);
 
-  const { updateBlockItemField } = useResumeStore();
+  const { updateBlockItemField, setSettingsOpen } = useResumeStore();
   const virtualElementRef = useRef<any>(null);
 
   const { refs, floatingStyles, update } = useFloating({
@@ -129,11 +130,16 @@ const AIToolbar: React.FC = () => {
     setAiSuggestion('');
 
     try {
-      const result = type === 'polish' ? await polishText(selection.text) : await expandText(selection.text);
+      const label = selection.target?.dataset.label;
+      const result = type === 'polish'
+        ? await polishText(selection.text, label)
+        : await expandText(selection.text, label);
       setAiSuggestion(result);
       setMode('suggestion');
-    } catch (err) {
-      setMode('toolbar');
+      setMode('suggestion');
+    } catch (err: any) {
+      setMode('error');
+      setError(err);
       console.error("AI Action failed:", err);
     }
   };
@@ -234,6 +240,33 @@ const AIToolbar: React.FC = () => {
                     <Check className="w-4 h-4" />
                   </button>
                 </div>
+              </div>
+            )}
+
+            {mode === 'error' && (
+              <div className="flex items-center gap-3 px-2 py-1">
+                <div className="flex items-center gap-2 text-red-400">
+                  <AlertCircle className="w-4 h-4" />
+                  <span className="text-[11px] font-bold max-w-[150px] truncate">
+                    {error?.name === 'AIConfigurationError' ? '需配置 API Key' : '请求失败'}
+                  </span>
+                </div>
+                <div className="w-[1px] h-3 bg-zinc-700/50" />
+                {error?.name === 'AIConfigurationError' ? (
+                  <button
+                    onClick={() => { setVisible(false); setSettingsOpen(true); }}
+                    className="flex items-center gap-1.5 px-2 py-1 bg-red-500/10 hover:bg-red-500/20 text-red-400 rounded-lg text-[10px] font-bold transition-all border border-red-500/20"
+                  >
+                    <Settings className="w-3 h-3" /> 去配置
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => setMode('toolbar')}
+                    className="p-1.5 hover:bg-zinc-800 text-zinc-400 hover:text-zinc-200 rounded-lg transition-all"
+                  >
+                    <RefreshCcw className="w-3.5 h-3.5" />
+                  </button>
+                )}
               </div>
             )}
           </div>

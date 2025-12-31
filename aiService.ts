@@ -86,12 +86,21 @@ class OpenAIProvider implements AIProvider {
     }
 }
 
+// ==================== 错误类型 ====================
+
+export class AIConfigurationError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = 'AIConfigurationError';
+    }
+}
+
 // ==================== 提供商工厂 ====================
 
 const createProvider = (): AIProvider => {
     const apiKey = getApiKey();
     if (!apiKey) {
-        throw new Error('请在设置中配置 API Key，或在 .env.local 文件中设置 GEMINI_API_KEY');
+        throw new AIConfigurationError('请先配置 API Key');
     }
 
     const provider = getProvider();
@@ -114,8 +123,9 @@ const callAI = async (prompt: string): Promise<string> => {
 
 // ==================== 导出的 AI 功能 ====================
 
-export const polishText = async (text: string): Promise<string> => {
-    const prompt = `你是一位专业的简历优化专家。请对以下简历内容进行润色，使其更加专业、简洁、有力。保持原意，优化表达方式。
+export const polishText = async (text: string, context?: string): Promise<string> => {
+    const contextInfo = context ? `你正在优化简历的【${context}】部分。` : '';
+    const prompt = `你是一位专业的简历优化专家。${contextInfo}请对以下简历内容进行润色，使其更加专业、简洁、有力。保持原意，优化表达方式。
 直接返回优化后的内容，不要添加任何解释或前缀。
 
 原文：
@@ -123,8 +133,9 @@ ${text}`;
     return callAI(prompt);
 };
 
-export const expandText = async (text: string): Promise<string> => {
-    const prompt = `你是一位专业的简历优化专家。请对以下简历内容进行扩展，添加更多具体细节、量化指标或技术关键词，使其更加丰富和有说服力。保持专业性。
+export const expandText = async (text: string, context?: string): Promise<string> => {
+    const contextInfo = context ? `你正在优化简历的【${context}】部分。` : '';
+    const prompt = `你是一位专业的简历优化专家。${contextInfo}请对以下简历内容进行扩展，添加更多具体细节、量化指标或技术关键词，使其更加丰富和有说服力。保持专业性。
 直接返回扩展后的内容，不要添加任何解释或前缀。
 
 原文：
@@ -132,8 +143,9 @@ ${text}`;
     return callAI(prompt);
 };
 
-export const simplifyText = async (text: string): Promise<string> => {
-    const prompt = `你是一位专业的简历优化专家。请对以下简历内容进行简化，去除冗余信息，保留核心要点，使其更加精炼。
+export const simplifyText = async (text: string, context?: string): Promise<string> => {
+    const contextInfo = context ? `你正在优化简历的【${context}】部分。` : '';
+    const prompt = `你是一位专业的简历优化专家。${contextInfo}请对以下简历内容进行简化，去除冗余信息，保留核心要点，使其更加精炼。
 直接返回简化后的内容，不要添加任何解释或前缀。
 
 原文：
@@ -141,8 +153,9 @@ ${text}`;
     return callAI(prompt);
 };
 
-export const summarizeText = async (text: string): Promise<string> => {
-    const prompt = `你是一位专业的简历优化专家。请用一句话总结以下内容的核心价值和亮点。
+export const summarizeText = async (text: string, context?: string): Promise<string> => {
+    const contextInfo = context ? `你正在优化简历的【${context}】部分。` : '';
+    const prompt = `你是一位专业的简历优化专家。${contextInfo}请用一句话总结以下内容的核心价值和亮点。
 直接返回总结，不要添加任何解释或前缀。
 
 原文：
@@ -184,11 +197,20 @@ ${JSON.stringify(resume, null, 2)}`;
     const result = await callAI(prompt);
 
     try {
-        const jsonMatch = result.match(/\{[\s\S]*\}/);
-        if (jsonMatch) {
-            return JSON.parse(jsonMatch[0]);
+        let jsonString = result;
+        // 尝试提取 Markdown 代码块中的 JSON
+        const markdownMatch = result.match(/```json\s*([\s\S]*?)\s*```/);
+        if (markdownMatch) {
+            jsonString = markdownMatch[1];
+        } else {
+            // 兜底：尝试提取第一个大括号对
+            const jsonMatch = result.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+                jsonString = jsonMatch[0];
+            }
         }
-        throw new Error('无法解析诊断结果');
+
+        return JSON.parse(jsonString);
     } catch (e) {
         console.error('Parse diagnosis result failed:', result);
         return {
