@@ -1,19 +1,24 @@
 
 import React, { useState, useEffect } from 'react';
 import { useResumeStore } from '../store';
-import { diagnoseResume } from '../aiService';
+import { diagnoseResume, fixTextWithSuggestion } from '../aiService';
 import { DiagnosisResult } from '../types';
-import { X, ShieldAlert, CheckCircle2, Info, Loader2, Target, BarChart3, TrendingUp, Sparkles } from 'lucide-react';
+import { X, ShieldAlert, CheckCircle2, Info, Loader2, Target, BarChart3, TrendingUp, Sparkles, RefreshCw, Wand2 } from 'lucide-react';
 
 interface IssueItemProps {
     issue: any;
     resume: any;
     updateBlockItemField: any;
+    onResolve: (issue: any) => void;
+    isResolved: boolean;
 }
 
-const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemField }) => {
+const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemField, onResolve, isResolved }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editValue, setEditValue] = useState('');
+    const [isAiFixing, setIsAiFixing] = useState(false);
+    const [aiReviewMode, setAiReviewMode] = useState(false);
+    const [originalContent, setOriginalContent] = useState('');
 
     const canEdit = issue.blockId && issue.itemId && issue.field;
 
@@ -24,8 +29,33 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemFie
         if (item && issue.field) {
             setEditValue(item.fields[issue.field] || '');
             setIsEditing(true);
+            setAiReviewMode(false);
         } else {
             alert("无法定位到具体内容，请手动修改");
+        }
+    };
+
+    const handleAiFix = async () => {
+        if (!canEdit) return;
+
+        const block = resume.blocks.find((b: any) => b.id === issue.blockId);
+        const item = block?.items.find((i: any) => i.id === issue.itemId);
+        const currentText = item?.fields[issue.field] || '';
+
+        setOriginalContent(currentText);
+        setEditValue(currentText);
+        setIsEditing(true);
+        setAiReviewMode(true);
+        setIsAiFixing(true);
+
+        try {
+            const fixedText = await fixTextWithSuggestion(currentText, issue.suggestion, `${issue.module} - ${issue.field}`);
+            setEditValue(fixedText);
+        } catch (error) {
+            console.error("AI Fix failed", error);
+            setAiReviewMode(false);
+        } finally {
+            setIsAiFixing(false);
         }
     };
 
@@ -33,8 +63,42 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemFie
         if (canEdit) {
             updateBlockItemField(issue.blockId, issue.itemId, issue.field, editValue);
             setIsEditing(false);
+            setAiReviewMode(false);
+            onResolve(issue);
         }
     };
+
+    const handleCancel = () => {
+        setIsEditing(false);
+        setAiReviewMode(false);
+        setEditValue('');
+    };
+
+    // If resolved but not currently editing, show completed state
+    if (isResolved && !isEditing) {
+        return (
+            <div className="p-5 bg-emerald-500/5 rounded-2xl border border-emerald-500/20 transition-all opacity-80">
+                <div className="flex gap-4">
+                    <div className="mt-1 flex-none w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-500 flex items-center justify-center">
+                        <CheckCircle2 className="w-5 h-5" />
+                    </div>
+                    <div className="flex-1">
+                        <div className="flex items-center justify-between mb-1">
+                            <span className="text-[10px] font-black text-emerald-500/60 uppercase tracking-widest">{issue.module} / {issue.field || 'General'}</span>
+                            <button
+                                onClick={handleStartEdit}
+                                className="text-[10px] px-2 py-1 hover:bg-emerald-500/10 text-emerald-600 rounded font-bold transition-colors"
+                            >
+                                再次更改
+                            </button>
+                        </div>
+                        <h4 className="font-bold text-zinc-300 line-through decoration-emerald-500/30">{issue.issue}</h4>
+                        <p className="text-sm text-emerald-600/70 mt-1">已根据建议完成优化</p>
+                    </div>
+                </div>
+            </div>
+        );
+    }
 
     return (
         <div className="group p-5 bg-zinc-800/40 rounded-2xl border border-zinc-800 hover:border-zinc-700 transition-all">
@@ -47,12 +111,20 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemFie
                         <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">{issue.module} / {issue.field || 'General'}</span>
                         <div className="flex items-center gap-2">
                             {canEdit && !isEditing && (
-                                <button
-                                    onClick={handleStartEdit}
-                                    className="text-[10px] px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded font-bold transition-colors"
-                                >
-                                    快速修改
-                                </button>
+                                <>
+                                    <button
+                                        onClick={handleAiFix}
+                                        className="flex items-center gap-1 text-[10px] px-2 py-1 bg-indigo-500/10 hover:bg-indigo-500/20 text-indigo-400 border border-indigo-500/20 rounded font-bold transition-colors"
+                                    >
+                                        <Wand2 className="w-3 h-3" /> AI 修复
+                                    </button>
+                                    <button
+                                        onClick={handleStartEdit}
+                                        className="text-[10px] px-2 py-1 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded font-bold transition-colors"
+                                    >
+                                        手动修改
+                                    </button>
+                                </>
                             )}
                             <span className={`text-[10px] px-2 py-0.5 rounded uppercase font-bold ${issue.severity === 'warning' ? 'bg-amber-500/20 text-amber-500' : 'bg-blue-500/20 text-blue-500'}`}>
                                 {issue.severity === 'warning' ? '重要' : '建议'}
@@ -66,25 +138,61 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemFie
                     </p>
 
                     {isEditing && (
-                        <div className="mt-4 animate-in fade-in slide-in-from-top-2">
-                            <textarea
-                                className="w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-200 focus:border-blue-500 outline-none transition-all min-h-[100px] mb-2 font-mono"
-                                value={editValue}
-                                onChange={(e) => setEditValue(e.target.value)}
-                                placeholder="在此处直接修改内容..."
-                            />
+                        <div className="mt-4 animate-in fade-in slide-in-from-top-2 border-t border-zinc-700/50 pt-4">
+                            {/* Comparison View */}
+                            {aiReviewMode && !isAiFixing && (
+                                <div className="mb-4 space-y-2">
+                                    <div className="flex justify-between items-center text-xs font-bold text-zinc-500 uppercase">
+                                        <span>原始内容 (可复制)</span>
+                                        <button
+                                            onClick={() => {
+                                                navigator.clipboard.writeText(originalContent);
+                                                // Success feedback could be added here
+                                            }}
+                                            className="text-[10px] lowercase text-zinc-400 hover:text-blue-400 flex items-center gap-1"
+                                        >
+                                            复制
+                                        </button>
+                                    </div>
+                                    <div className="p-3 bg-zinc-900/50 rounded-xl text-sm text-zinc-400 border border-zinc-800/50 leading-relaxed line-through decoration-zinc-700 select-text cursor-text">
+                                        {originalContent}
+                                    </div>
+                                    <div className="flex items-center gap-2 text-indigo-400 text-xs font-bold mt-2">
+                                        <Sparkles className="w-3 h-3" /> AI 优化结果 (您可以继续调整)
+                                    </div>
+                                </div>
+                            )}
+
+                            <div className="relative">
+                                {isAiFixing && (
+                                    <div className="absolute inset-0 bg-zinc-950/80 backdrop-blur-sm z-10 flex items-center justify-center rounded-xl border border-blue-500/30">
+                                        <div className="flex items-center gap-2 text-blue-400 font-bold animate-pulse">
+                                            <Sparkles className="w-4 h-4" />
+                                            <span>AI 正在根据建议优化内容...</span>
+                                        </div>
+                                    </div>
+                                )}
+                                <textarea
+                                    className={`w-full bg-zinc-950 border border-zinc-800 rounded-xl p-3 text-sm text-zinc-200 focus:border-blue-500 outline-none transition-all min-h-[100px] mb-2 font-mono scrollbar-thin scrollbar-thumb-zinc-700 scrollbar-track-transparent ${aiReviewMode ? 'border-indigo-500/30 bg-indigo-500/5' : ''}`}
+                                    value={editValue}
+                                    onChange={(e) => setEditValue(e.target.value)}
+                                    placeholder="在此处直接修改内容..."
+                                    data-label={`${issue.module} - ${issue.field}`}
+                                    disabled={isAiFixing}
+                                />
+                            </div>
                             <div className="flex justify-end gap-2">
                                 <button
-                                    onClick={() => setIsEditing(false)}
+                                    onClick={handleCancel}
                                     className="px-3 py-1.5 text-xs font-bold text-zinc-400 hover:text-zinc-200"
                                 >
-                                    取消
+                                    {aiReviewMode ? '放弃' : '取消'}
                                 </button>
                                 <button
                                     onClick={handleSave}
-                                    className="px-3 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-bold transition-colors shadow-lg shadow-blue-500/20"
+                                    className={`px-3 py-1.5 text-white rounded-lg text-xs font-bold transition-colors shadow-lg flex items-center gap-1 ${aiReviewMode ? 'bg-indigo-600 hover:bg-indigo-500 shadow-indigo-500/20' : 'bg-blue-600 hover:bg-blue-500 shadow-blue-500/20'}`}
                                 >
-                                    保存修改
+                                    {aiReviewMode ? <><CheckCircle2 className="w-3 h-3" /> 采纳修改</> : '保存修改'}
                                 </button>
                             </div>
                         </div>
@@ -100,6 +208,7 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [loading, setLoading] = useState(true);
     const [result, setResult] = useState<DiagnosisResult | null>(null);
     const [error, setError] = useState<any>(null);
+    const [resolvedIssues, setResolvedIssues] = useState<Set<string>>(new Set());
 
     const runDiagnosis = async () => {
         setLoading(true);
@@ -117,7 +226,12 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
     useEffect(() => {
         runDiagnosis();
-    }, [resume]);
+    }, []);
+
+    const handleResolve = (issue: any) => {
+        const key = `${issue.blockId}-${issue.itemId}-${issue.field}`;
+        setResolvedIssues(prev => new Set(prev).add(key));
+    };
 
     const ScoreBar = ({ label, score, color }: { label: string, score: number, color: string }) => (
         <div className="space-y-2">
@@ -147,7 +261,17 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                             <p className="text-xs text-zinc-500">基于 AI 的资深 HR 模拟分析</p>
                         </div>
                     </div>
-                    <button onClick={onClose} className="p-2 text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800 rounded-full transition-all"><X className="w-6 h-6" /></button>
+                    <div className="flex items-center gap-3">
+                        {!loading && result && (
+                            <button
+                                onClick={runDiagnosis}
+                                className="flex items-center gap-2 px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 text-zinc-300 rounded-lg text-xs font-bold transition-all"
+                            >
+                                <RefreshCw className="w-3.5 h-3.5" /> 重新诊断
+                            </button>
+                        )}
+                        <button onClick={onClose} className="p-2 text-zinc-500 hover:text-zinc-100 hover:bg-zinc-800 rounded-full transition-all"><X className="w-6 h-6" /></button>
+                    </div>
                 </div>
 
                 {loading ? (
@@ -239,20 +363,42 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
                         {/* Right Issues List */}
                         <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-                            <div className="flex items-center gap-2 mb-6">
-                                <Target className="w-5 h-5 text-zinc-400" />
-                                <h3 className="font-bold text-zinc-300">优化建议 ({result.issues.length})</h3>
+                            <div className="flex items-center justify-between mb-6">
+                                <div className="flex items-center gap-2">
+                                    <Target className="w-5 h-5 text-zinc-400" />
+                                    <h3 className="font-bold text-zinc-300">优化建议 ({result.issues.length})</h3>
+                                </div>
+                                <div className="flex items-center gap-2 px-3 py-1 bg-zinc-800/50 rounded-full border border-zinc-700/50">
+                                    <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                    <span className="text-xs font-bold text-zinc-400">
+                                        进度: <span className="text-emerald-500">{resolvedIssues.size}</span> / {result.issues.length}
+                                    </span>
+                                </div>
                             </div>
 
                             <div className="space-y-4">
-                                {result.issues.map((issue, idx) => (
-                                    <IssueItem
-                                        key={idx}
-                                        issue={issue}
-                                        resume={resume}
-                                        updateBlockItemField={updateBlockItemField}
-                                    />
-                                ))}
+                                {result.issues
+                                    .sort((a, b) => {
+                                        const keyA = `${a.blockId}-${a.itemId}-${a.field}`;
+                                        const keyB = `${b.blockId}-${b.itemId}-${b.field}`;
+                                        const resolvedA = resolvedIssues.has(keyA);
+                                        const resolvedB = resolvedIssues.has(keyB);
+
+                                        // Resolved issues go to bottom
+                                        if (resolvedA !== resolvedB) return resolvedA ? 1 : -1;
+                                        // Then sort by severity
+                                        return (a.severity === 'warning' ? -1 : 1);
+                                    })
+                                    .map((issue, idx) => (
+                                        <IssueItem
+                                            key={idx}
+                                            issue={issue}
+                                            resume={resume}
+                                            updateBlockItemField={updateBlockItemField}
+                                            onResolve={handleResolve}
+                                            isResolved={resolvedIssues.has(`${issue.blockId}-${issue.itemId}-${issue.field}`)}
+                                        />
+                                    ))}
 
                                 {result.issues.length === 0 && (
                                     <div className="py-20 flex flex-col items-center justify-center text-zinc-500 gap-4">

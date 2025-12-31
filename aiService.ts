@@ -163,7 +163,25 @@ ${text}`;
     return callAI(prompt);
 };
 
-export const diagnoseResume = async (resume: ResumeContent): Promise<DiagnosisResult> => {
+export const fixTextWithSuggestion = async (text: string, suggestion: string, context?: string): Promise<string> => {
+    const provider = createProvider();
+    const prompt = `
+你是一个专业的简历优化专家。请根据以下修改建议，重写简历内容。
+
+【修改建议】：${suggestion}
+【原始内容】：${text}
+${context ? `【上下文】：${context}` : ''}
+
+要求：
+1. 严格遵循修改建议进行优化。
+2. 保持专业、精炼的职场语言风格。
+3. 仅输出优化后的内容，不要包含任何解释或Markdown标记。
+    `.trim();
+
+    return await provider.callAI(prompt);
+};
+
+export const diagnoseResume = async (resume: any): Promise<DiagnosisResult> => {
     const prompt = `你是一位资深 HR 和简历专家。请从以下维度诊断这份简历，并返回 JSON 格式的评估结果：
 
 评分维度（每项 0-100 分）：
