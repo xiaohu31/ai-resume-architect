@@ -26,6 +26,7 @@ export interface ResumeSettings {
   apiEndpoint?: string;
   templateId: 'classic' | 'minimal' | 'professional';
   pagePadding: number;
+  fontFamily?: string;
 }
 
 export interface ResumeContent {

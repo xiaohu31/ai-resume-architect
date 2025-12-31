@@ -16,10 +16,11 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     const textStyle = {
         fontSize: `${settings.fontSize}px`,
         lineHeight: settings.lineHeight,
+        fontFamily: style.fontFamily,
     };
 
     return (
-        <div className="text-zinc-800">
+        <div className="text-zinc-800" style={{ fontFamily: style.fontFamily }}>
             {/* Header Area */}
             <div className="flex justify-between items-start mb-6 page-break-avoid">
                 <div className="flex-1">

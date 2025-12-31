@@ -19,6 +19,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
           style={{
             fontSize: settings.fontSize,
             lineHeight: settings.lineHeight,
+            fontFamily: settings.fontFamily,
           }}
         />
       </div>

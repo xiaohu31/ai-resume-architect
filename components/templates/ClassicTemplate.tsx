@@ -16,10 +16,11 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     const textStyle = {
         fontSize: `${settings.fontSize}px`,
         lineHeight: settings.lineHeight,
+        fontFamily: style.fontFamily,
     };
 
     return (
-        <div className="text-zinc-900">
+        <div className="text-zinc-900" style={{ fontFamily: style.fontFamily }}>
             {/* Header: Left info, Right Avatar */}
             <div className="flex justify-between items-start mb-6 page-break-avoid">
                 <div className="flex-1">

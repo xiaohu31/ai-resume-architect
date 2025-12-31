@@ -16,13 +16,14 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     const textStyle = {
         fontSize: `${settings.fontSize}px`,
         lineHeight: settings.lineHeight,
+        fontFamily: style.fontFamily,
     };
 
     const sideBlocks = resume.blocks.filter(b => b.visible && ['skills', 'education', 'certificate'].includes(b.type));
     const mainBlocks = resume.blocks.filter(b => b.visible && ['work', 'project', 'custom'].includes(b.type) && b.type !== 'personal');
 
     return (
-        <div className="flex bg-white">
+        <div className="flex bg-white" style={{ fontFamily: style.fontFamily }}>
             {/* Sidebar (Left) */}
             <div className="w-[220px] bg-zinc-900 text-white p-6 flex flex-col gap-5 shrink-0">
                 {/* Avatar & Basic Info */}
@@ -77,7 +78,8 @@ const ProfessionalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                                     {block.type === 'education' ? (
                                         <div className="space-y-0.5">
                                             <div className="font-bold text-white">{item.fields.school}</div>
-                                            <div className="text-zinc-400">{item.fields.major} · {item.fields.degree}</div>
+                                            <div className="text-zinc-400">
+                                                {item.fields.major} · {item.fields.degree}</div>
                                             <div className="text-[9px] font-mono text-zinc-600">{item.fields.duration}</div>
                                             {item.fields.content && (
                                                 <div className="prose prose-sm prose-invert max-w-none opacity-60 mt-1" style={{ fontSize: '9px', lineHeight: '1.4' }}>

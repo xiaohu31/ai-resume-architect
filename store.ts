@@ -22,6 +22,7 @@ const initialResume: ResumeContent = {
     apiEndpoint: '',
     templateId: 'classic',
     pagePadding: 15,
+    fontFamily: '"Alibaba PuHuiTi 3.0", "Noto Sans SC", sans-serif',
   },
   blocks: [
     {

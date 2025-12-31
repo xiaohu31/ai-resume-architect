@@ -120,6 +120,34 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     </div>
                 </div>
 
+                {/* 字体选择 */}
+                <div>
+                    <div className="flex items-center gap-2 text-xs font-medium text-zinc-400 uppercase tracking-wider mb-3">
+                        <Palette className="w-3.5 h-3.5" />
+                        字体选择
+                    </div>
+                    <div className="grid grid-cols-2 gap-2">
+                        {[
+                            { id: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif', name: 'Inter (默认)' },
+                            { id: '"Alibaba PuHuiTi 3.0", "Noto Sans SC", sans-serif', name: '阿里惠普体' },
+                            { id: '"Noto Sans SC", sans-serif', name: '思源黑体' },
+                            { id: '"Microsoft YaHei", sans-serif', name: '微软雅黑' }
+                        ].map((font) => (
+                            <button
+                                key={font.id}
+                                onClick={() => updateSettings({ fontFamily: font.id })}
+                                className={`px-3 py-2 rounded-lg text-xs font-medium transition-all border ${resume?.settings?.fontFamily === font.id
+                                    ? 'bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20'
+                                    : 'bg-zinc-800 border-zinc-700 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-200 hover:border-zinc-600'
+                                    }`}
+                                style={{ fontFamily: font.id }}
+                            >
+                                {font.name}
+                            </button>
+                        ))}
+                    </div>
+                </div>
+
                 {/* 页边距 */}
                 <div>
                     <div className="flex items-center justify-between mb-3">
