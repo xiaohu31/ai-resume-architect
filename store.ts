@@ -23,6 +23,7 @@ const initialResume: ResumeContent = {
     templateId: 'classic',
     pagePadding: 15,
     fontFamily: '"Alibaba PuHuiTi 3.0", "Noto Sans SC", sans-serif',
+    moduleTitleSize: 18,
   },
   blocks: [
     {

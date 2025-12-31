@@ -27,6 +27,7 @@ export interface ResumeSettings {
   templateId: 'classic' | 'minimal' | 'professional';
   pagePadding: number;
   fontFamily?: string;
+  moduleTitleSize: number;
 }
 
 export interface ResumeContent {

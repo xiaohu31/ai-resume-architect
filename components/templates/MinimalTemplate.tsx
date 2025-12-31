@@ -8,6 +8,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     const settings = {
         fontSize: style.fontSize || 10,
         lineHeight: style.lineHeight || 1.5,
+        moduleTitleSize: style.moduleTitleSize || 11,
     };
 
     const personalBlock = resume?.blocks?.find(b => b.type === 'personal');
@@ -19,6 +20,11 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
         fontFamily: style.fontFamily,
     };
 
+    const sectionTitleStyle = {
+        fontSize: `${settings.moduleTitleSize}px`,
+        lineHeight: 1.2,
+    };
+
     return (
         <div className="text-zinc-800" style={{ fontFamily: style.fontFamily }}>
             {/* Header Area */}
@@ -26,7 +32,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                 <div className="flex-1">
                     <h1 className="text-3xl font-light tracking-tight text-zinc-900 mb-1">{personalInfo.name || '姓名'}</h1>
                     <div className="text-lg text-zinc-500 font-light mb-3">{personalInfo.jobIntention}</div>
-                    <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-[10px] text-zinc-400 font-medium">
+                    <div className="flex flex-wrap gap-x-5 gap-y-1.5 text-zinc-400 font-medium" style={{ fontSize: `${settings.fontSize - 1}px` }}>
                         <div className="flex items-center gap-1"><Phone className="w-2.5 h-2.5" /> {personalInfo.phone}</div>
                         <div className="flex items-center gap-1"><Mail className="w-2.5 h-2.5" /> {personalInfo.email}</div>
                         {personalInfo.location && <div className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5" /> {personalInfo.location}</div>}
@@ -61,7 +67,7 @@ const MinimalTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                         <div key={block.id} className="relative page-break-avoid">
                             {/* Simple Minimal Title */}
                             <div className="flex items-center gap-2 mb-3">
-                                <h2 className="text-[11px] font-bold text-zinc-400 uppercase tracking-[0.15em]">{block.title}</h2>
+                                <h2 className="font-bold text-zinc-400 uppercase tracking-[0.15em]" style={sectionTitleStyle}>{block.title}</h2>
                                 <div className="flex-1 h-px bg-zinc-100"></div>
                             </div>
 

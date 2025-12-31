@@ -9,7 +9,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
   const templateId = resume?.settings?.templateId || 'classic';
   const Template = templateRegistry[templateId]?.component || templateRegistry.classic.component;
 
-  const settings = resume?.settings || { fontSize: 11, lineHeight: 1.6 };
+  const settings = resume?.settings || { fontSize: 11, lineHeight: 1.6, moduleTitleSize: 18, fontFamily: '"Alibaba PuHuiTi 3.0", "Noto Sans SC", sans-serif' };
 
   return (
     <div className="relative group/preview">
@@ -20,6 +20,7 @@ const PreviewPanel = forwardRef<HTMLDivElement>((props, ref) => {
             fontSize: settings.fontSize,
             lineHeight: settings.lineHeight,
             fontFamily: settings.fontFamily,
+            moduleTitleSize: settings.moduleTitleSize,
           }}
         />
       </div>

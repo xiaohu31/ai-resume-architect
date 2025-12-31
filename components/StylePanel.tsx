@@ -17,6 +17,7 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
     const fontSize = resume?.settings?.fontSize || 11;
     const lineHeight = resume?.settings?.lineHeight || 1.6;
     const pagePadding = resume?.settings?.pagePadding || 15;
+    const moduleTitleSize = resume?.settings?.moduleTitleSize || 18;
 
     // 点击外部关闭
     useEffect(() => {
@@ -36,10 +37,10 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
     return (
         <div
             ref={panelRef}
-            className="absolute top-12 left-1/2 -translate-x-1/2 w-80 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 overflow-hidden"
+            className="absolute top-12 left-1/2 -translate-x-1/2 w-80 bg-zinc-900 border border-zinc-700 rounded-2xl shadow-[0_20px_50px_rgba(0,0,0,0.5)] z-50 overflow-hidden flex flex-col max-h-[calc(100vh-160px)] min-h-[200px]"
         >
             {/* Header */}
-            <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-800/50">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-zinc-800 bg-zinc-800/50 shrink-0">
                 <div className="flex items-center gap-2 text-sm font-medium text-zinc-200">
                     <Palette className="w-4 h-4 text-blue-400" />
                     样式设置
@@ -49,7 +50,7 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                 </button>
             </div>
 
-            <div className="p-4 space-y-6 text-left">
+            <div className="p-4 space-y-6 text-left overflow-y-auto">
                 {/* 模版选择 */}
                 <div>
                     <div className="flex items-center gap-2 text-xs font-medium text-zinc-400 uppercase tracking-wider mb-3">
@@ -84,7 +85,7 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     <input
                         type="range"
                         min="8"
-                        max="18"
+                        max="24"
                         step="0.5"
                         value={fontSize}
                         onChange={(e) => updateSettings({ fontSize: parseFloat(e.target.value) })}
@@ -92,7 +93,31 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     />
                     <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
                         <span>8px</span>
-                        <span>18px</span>
+                        <span>24px</span>
+                    </div>
+                </div>
+
+                {/* 模块标题大小 */}
+                <div>
+                    <div className="flex items-center justify-between mb-3">
+                        <div className="flex items-center gap-2 text-xs font-medium text-zinc-400 uppercase tracking-wider">
+                            <Maximize className="w-3.5 h-3.5" />
+                            模块标题大小
+                        </div>
+                        <span className="text-xs font-mono text-zinc-500">{moduleTitleSize}px</span>
+                    </div>
+                    <input
+                        type="range"
+                        min="12"
+                        max="32"
+                        step="1"
+                        value={moduleTitleSize}
+                        onChange={(e) => updateSettings({ moduleTitleSize: parseInt(e.target.value) })}
+                        className="w-full h-1.5 bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-500"
+                    />
+                    <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
+                        <span>12px</span>
+                        <span>32px</span>
                     </div>
                 </div>
 
@@ -107,7 +132,7 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     </div>
                     <input
                         type="range"
-                        min="1.0"
+                        min="0.8"
                         max="3.0"
                         step="0.1"
                         value={lineHeight}
@@ -115,7 +140,7 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                         className="w-full h-1.5 bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-500"
                     />
                     <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
-                        <span>紧凑 (1.0)</span>
+                        <span>紧凑 (0.8)</span>
                         <span>宽松 (3.0)</span>
                     </div>
                 </div>
@@ -159,16 +184,16 @@ const StylePanel: React.FC<StylePanelProps> = ({ isOpen, onClose }) => {
                     </div>
                     <input
                         type="range"
-                        min="5"
-                        max="30"
+                        min="0"
+                        max="50"
                         step="1"
                         value={pagePadding}
                         onChange={(e) => updateSettings({ pagePadding: parseInt(e.target.value) })}
                         className="w-full h-1.5 bg-zinc-700 rounded-full appearance-none cursor-pointer accent-blue-500"
                     />
                     <div className="flex justify-between text-[10px] text-zinc-600 mt-1">
-                        <span>极窄 (5)</span>
-                        <span>极宽 (30)</span>
+                        <span>0mm</span>
+                        <span>50mm</span>
                     </div>
                 </div>
             </div>

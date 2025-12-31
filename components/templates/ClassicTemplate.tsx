@@ -8,6 +8,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
     const settings = {
         fontSize: style.fontSize || 11,
         lineHeight: style.lineHeight || 1.5,
+        moduleTitleSize: style.moduleTitleSize || 18,
     };
 
     const personalBlock = resume?.blocks?.find(b => b.type === 'personal');
@@ -19,6 +20,11 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
         fontFamily: style.fontFamily,
     };
 
+    const sectionTitleStyle = {
+        fontSize: `${settings.moduleTitleSize}px`,
+        lineHeight: 1.2,
+    };
+
     return (
         <div className="text-zinc-900" style={{ fontFamily: style.fontFamily }}>
             {/* Header: Left info, Right Avatar */}
@@ -26,7 +32,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                 <div className="flex-1">
                     <h1 className="text-4xl font-bold tracking-tight text-zinc-900 mb-4">{personalInfo.name || '姓名'}</h1>
 
-                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-zinc-700 mb-2">
+                    <div className="flex flex-wrap gap-x-4 gap-y-1 text-zinc-700 mb-2" style={{ fontSize: `${settings.fontSize}px` }}>
                         {personalInfo.gender && <span>{personalInfo.gender}</span>}
                         {personalInfo.gender && (personalInfo.birthday || personalInfo.age) && <span className="text-zinc-300">|</span>}
                         {(personalInfo.birthday || personalInfo.age) && <span>{personalInfo.birthday ? `生日: ${personalInfo.birthday}` : `年龄: ${personalInfo.age}`}</span>}
@@ -36,7 +42,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                         {personalInfo.email && <span className="ml-2 flex items-center gap-1"><Mail className="w-3.5 h-3.5 text-zinc-400" />{personalInfo.email}</span>}
                     </div>
 
-                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-sm text-zinc-600 font-medium">
+                    <div className="flex flex-wrap gap-x-3 gap-y-1 text-zinc-600 font-medium" style={{ fontSize: `${settings.fontSize}px` }}>
                         {personalInfo.jobStatus && <span>{personalInfo.jobStatus}</span>}
                         {personalInfo.yearsOfExperience && <span className="text-zinc-300">|</span>}
                         {personalInfo.yearsOfExperience && <span>{personalInfo.yearsOfExperience}经验</span>}
@@ -60,7 +66,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                 {personalInfo.summary && (
                     <div className="relative page-break-avoid">
                         <div className="flex flex-col mb-3">
-                            <h2 className="text-lg font-bold text-zinc-900 tracking-tight">个人优势</h2>
+                            <h2 className="font-bold text-zinc-900 tracking-tight" style={sectionTitleStyle}>个人优势</h2>
                             <div className="h-[1px] bg-zinc-200 mt-0.5"></div>
                         </div>
                         <div className="text-zinc-700 prose prose-sm max-w-none prose-zinc" style={textStyle}>
@@ -74,7 +80,7 @@ const ClassicTemplate: React.FC<TemplateProps> = ({ resume, style }) => {
                         <div key={block.id} className="relative page-break-avoid">
                             {/* Section Header with Line */}
                             <div className="flex flex-col mb-3">
-                                <h2 className="text-lg font-bold text-zinc-900 tracking-tight">{block.title}</h2>
+                                <h2 className="font-bold text-zinc-900 tracking-tight" style={sectionTitleStyle}>{block.title}</h2>
                                 <div className="h-[1px] bg-zinc-200 mt-0.5"></div>
                             </div>
 
