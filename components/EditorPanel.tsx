@@ -219,7 +219,11 @@ const SortableItem = ({
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <button onClick={(e) => { e.stopPropagation(); removeBlockItem(activeBlock.id, item.id); }} className="p-1.5 text-zinc-500 hover:text-red-400"><Trash2 className="w-3.5 h-3.5" /></button>
+          {activeBlock.id !== 'personal' && (
+            <button onClick={(e) => { e.stopPropagation(); removeBlockItem(activeBlock.id, item.id); }} className="p-1.5 text-zinc-500 hover:text-red-400">
+              <Trash2 className="w-3.5 h-3.5" />
+            </button>
+          )}
           {item.isExpanded ? <ChevronUp className="w-4 h-4 text-zinc-500" /> : <ChevronDown className="w-4 h-4 text-zinc-500" />}
         </div>
       </div>
@@ -297,8 +301,13 @@ const SortableItem = ({
 
               <div className="grid grid-cols-3 gap-4 mb-4">
                 {renderField('age', '年龄', '例如：28岁')}
+                {renderField('birthday', '出生日期', '例如：1994/08')}
                 {renderField('gender', '性别', '男/女')}
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 mb-4">
                 {renderField('degree', '学历', '例如：本科')}
+                {renderField('expectedSalary', '期望薪资', '例如：20-30k')}
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
@@ -320,6 +329,7 @@ const SortableItem = ({
                 {renderField('degree', '学历', '硕士')}
                 {renderDurationFields()}
               </div>
+              {renderField('content', '在校经历 / 荣誉', '描述你在校期间的奖项、社团经历或核心课程...', 'textarea')}
             </>
           )}
 

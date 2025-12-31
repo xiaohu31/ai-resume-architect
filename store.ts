@@ -7,36 +7,9 @@ import { ResumeContent, Block, ResumeSettings, BlockItem } from './types';
 import { v4 as uuidv4 } from 'uuid';
 import { arrayMove } from '@dnd-kit/sortable';
 
-// Define the store state and actions
-interface ResumeState {
-  resume: ResumeContent;
-  activeBlockId: string | null;
-  isSettingsOpen: boolean;
-
-  // Basic Actions
-  setActiveBlock: (id: string | null) => void;
-  setSettingsOpen: (isOpen: boolean) => void;
-  setResume: (resume: ResumeContent) => void;
-  updateResumeTitle: (title: string) => void;
-  updateSettings: (settings: Partial<ResumeSettings>) => void;
-
-  // Block Actions
-  addCustomBlock: (title: string) => void;
-  removeBlock: (id: string) => void;
-  updateBlockTitle: (id: string, title: string) => void;
-  reorderBlocks: (activeId: string, overId: string) => void;
-
-  // Item Actions
-  addBlockItem: (blockId: string) => void;
-  removeBlockItem: (blockId: string, itemId: string) => void;
-  updateBlockItemField: (blockId: string, itemId: string, field: string, value: string) => void;
-  toggleBlockItemExpanded: (blockId: string, itemId: string) => void;
-  reorderItems: (blockId: string, activeId: string, overId: string) => void;
-}
-
 const initialResume: ResumeContent = {
   id: uuidv4(),
-  title: '陈开发者 - 高级全栈工程师 - 8年经验',
+  title: '张志诚 - 高级产品专家 - 10年互联网经验',
   createdAt: Date.now(),
   updatedAt: Date.now(),
   settings: {
@@ -47,6 +20,7 @@ const initialResume: ResumeContent = {
     apiKey: '',
     provider: 'gemini',
     apiEndpoint: '',
+    templateId: 'classic',
   },
   blocks: [
     {
@@ -59,40 +33,23 @@ const initialResume: ResumeContent = {
         {
           id: uuidv4(),
           fields: {
-            name: '陈修齐',
+            name: '张志诚',
             avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Felix',
-            jobIntention: '高级全栈工程师',
-            yearsOfExperience: '8年',
-            location: '深圳 / 杭州',
-            jobStatus: '在职-考虑机会',
-            summary: '8年互联网大厂经验 | 深度参与高并发电商中台建设 | 擅长 React/Next.js 与 Node.js 微服务架构',
+            jobIntention: '产品总监 / 资深产品专家',
+            yearsOfExperience: '10年',
+            location: '北京',
+            jobStatus: '离职-随时到岗',
+            summary: '10年互联网产品实战经验，先后供职于腾讯、字节跳动。深耕增长工具与商业化引擎，擅长通过数据驱动决策，曾主导 DAU 过亿级产品的核心功能迭代。具备极强的商业敏锐度与团队管理能力策略。',
             gender: '男',
-            age: '30岁',
-            phone: '138-0000-1234',
-            email: 'dev_chen@example.com',
-            wechat: 'chen_dev_88',
-            github: 'github.com/developer-chen'
+            age: '32岁',
+            birthday: '1992/05',
+            phone: '166-6666-6666',
+            email: 'chicheng_zhang@example.com',
+            wechat: 'chicheng_pm',
+            github: 'github.com/pm-zhang',
+            expectedSalary: '40-60k'
           },
           isExpanded: true
-        }
-      ]
-    },
-    {
-      id: 'education',
-      type: 'education',
-      title: '教育背景',
-      order: 1,
-      visible: true,
-      items: [
-        {
-          id: uuidv4(),
-          fields: {
-            school: '中山大学',
-            major: '软件工程',
-            degree: '硕士',
-            duration: '2014.09 - 2017.06'
-          },
-          isExpanded: false
         }
       ]
     },
@@ -100,30 +57,59 @@ const initialResume: ResumeContent = {
       id: 'work',
       type: 'work',
       title: '工作经历',
-      order: 2,
+      order: 1,
       visible: true,
       items: [
         {
           id: uuidv4(),
           fields: {
-            name: '阿里巴巴',
-            dept: '零售技术事业部',
-            role: '高级研发工程师 (L7/P7)',
-            duration: '2020.05 - 至今',
-            content: '1. 负责双11大促期间核心交易链路的性能压测与优化，通过多级缓存策略将系统 TPS 提升了 45%。\n2. 引入 Serverless 架构处理每日数千万次的图片处理需求，节省服务器成本约 30%。\n3. 指导 3 名中级工程师进行架构升级。',
-            performance: '- 成功应对了每秒 50 万次的峰值请求，实现 0 事故运行。\n- 优化了搜索排名的分词算法，核心转化率提升了 3.2%。'
+            name: '字节跳动 (ByteDance)',
+            dept: '搜索策略组',
+            role: '资深产品经理 (2-2)',
+            duration: '2019.10 - 2023.12',
+            content: '1. **策略优化**: 负责抖音搜索推荐策略优化，通过引入知识图谱增强语义理解，搜索点击准确率提升了 12%。\n2. **产品迭代**: 主导“智能搜索提示”功能上线，日均 PV 增长 25%，搜索到播放的转化率提升 5%。\n3. **跨部门协同**: 联合算法、研发团队，通过 AB Test 验证了超过 50 个实验方案，沉淀了一套完整的搜索评价指标体系。',
+            performance: '- 荣获 2021 年度公司级“卓越个人奖”。\n- 带领 5 人产品小组，成功支撑了春晚红包项目期间的千万级搜索并发需求。'
           },
           isExpanded: true
         },
         {
           id: uuidv4(),
           fields: {
-            name: '字节跳动',
-            dept: '抖音直播团队',
-            role: '前端开发工程师',
-            duration: '2017.07 - 2020.04',
-            content: '1. 负责直播间互动弹幕引擎的开发，采用 Canvas 渲染技术支持万人同屏弹幕，保证 60FPS 帧率。\n2. 搭建基于 Webpack 5 的内部组件库分发系统，减少项目构建时间 40%。',
-            performance: '- 编写的弹幕组件被公司 5 个以上部门引用，周活跃装机量 5w+。'
+            name: '腾讯 (Tencent)',
+            dept: 'QQ 浏览器业务部',
+            role: '产品经理',
+            duration: '2014.07 - 2019.09',
+            content: '1. **内容生态**: 负责内容流推荐算法的初衷建设，建立了一套基于兴趣标签的池化管理机制（Pool System）。\n2. **工具效率**: 优化了浏览器内核的离线加载策略，提升首页秒开率 15%。',
+            performance: '- 该项目获得 BG 级技术突破奖。'
+          },
+          isExpanded: false
+        }
+      ]
+    },
+    {
+      id: 'education',
+      type: 'education',
+      title: '教育背景',
+      order: 2,
+      visible: true,
+      items: [
+        {
+          id: uuidv4(),
+          fields: {
+            school: '清华大学',
+            major: '计算机科学与技术',
+            degree: '硕士',
+            duration: '2012.09 - 2014.07'
+          },
+          isExpanded: false
+        },
+        {
+          id: uuidv4(),
+          fields: {
+            school: '北京航空航天大学',
+            major: '信息工程',
+            degree: '学士',
+            duration: '2008.09 - 2012.07'
           },
           isExpanded: false
         }
@@ -139,11 +125,11 @@ const initialResume: ResumeContent = {
         {
           id: uuidv4(),
           fields: {
-            name: '开源简历架构师 AI Resume Builder',
-            role: '核心贡献者 / 架构设计',
-            duration: '2024.10 - 2024.12',
-            content: '基于 React 19 + Zustand 开发的一款 AI 驱动的简历编辑器。集成 Gemini 1.5 接口实现简历诊断与润色。',
-            performance: '- GitHub 获得 200+ Stars。\n- 实现高度优化的 A4 分页算法，导出 PDF 保持 100% 格式还原。'
+            name: '企业级 AI 诊断系统',
+            role: '项目负责人',
+            duration: '2023.01 - 2023.10',
+            content: '基于 LLM 构建的企业级内部故障预测系统。使用 LangChain 框架整合公司内部 Wiki 与监控数据，实现故障毫秒级自动定位。',
+            performance: '- 降低了运维人力成本约 40%，月均减少 P0 故障修复时长 15 分钟。'
           },
           isExpanded: true
         }
@@ -159,7 +145,23 @@ const initialResume: ResumeContent = {
         {
           id: uuidv4(),
           fields: {
-            content: '- **前端**: 熟练掌握 React 生态（Hooks, Next.js, Zustand, Tailwind CSS）。\n- **后端**: 深入理解 Node.js 异步非阻塞模型，精通 Redis, PostgreSQL, Kafka。\n- **架构**: 熟悉 DDD 领城驱动设计，具备微服务拆分与治理经验。'
+            content: '- **产品能力**: 深厚的策略产品功底，擅长数据建模与增长实验。\n- **技术广度**: 熟悉 Python, SQL，能独立进行复杂数据探索分析。\n- **软技能**: 优秀的商业分析能力，能敏锐洞察行业趋势。'
+          },
+          isExpanded: true
+        }
+      ]
+    },
+    {
+      id: 'volunteer',
+      type: 'custom',
+      title: '社交主页',
+      order: 5,
+      visible: true,
+      items: [
+        {
+          id: uuidv4(),
+          fields: {
+            content: 'www.linkedin.com/in/chicheng-zhang / www.zhangpm.com'
           },
           isExpanded: true
         }
@@ -168,7 +170,29 @@ const initialResume: ResumeContent = {
   ]
 };
 
-// Fixed: Exporting useResumeStore as required by other components
+interface ResumeState {
+  resume: ResumeContent;
+  activeBlockId: string | null;
+  isSettingsOpen: boolean;
+
+  setActiveBlock: (id: string | null) => void;
+  setSettingsOpen: (isOpen: boolean) => void;
+  setResume: (resume: ResumeContent) => void;
+  updateResumeTitle: (title: string) => void;
+  updateSettings: (settings: Partial<ResumeSettings>) => void;
+
+  addCustomBlock: (title: string) => void;
+  removeBlock: (id: string) => void;
+  updateBlockTitle: (id: string, title: string) => void;
+  reorderBlocks: (activeId: string, overId: string) => void;
+
+  addBlockItem: (blockId: string) => void;
+  removeBlockItem: (blockId: string, itemId: string) => void;
+  updateBlockItemField: (blockId: string, itemId: string, field: string, value: string) => void;
+  toggleBlockItemExpanded: (blockId: string, itemId: string) => void;
+  reorderItems: (blockId: string, activeId: string, overId: string) => void;
+}
+
 export const useResumeStore = create<ResumeState>()(
   temporal(
     persist(

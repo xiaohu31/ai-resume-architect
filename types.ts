@@ -24,6 +24,7 @@ export interface ResumeSettings {
   apiKey?: string;
   provider?: 'gemini' | 'openai';
   apiEndpoint?: string;
+  templateId: 'classic' | 'minimal' | 'professional';
 }
 
 export interface ResumeContent {
