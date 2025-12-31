@@ -3,7 +3,7 @@ import './globals.css';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'AI Resume Architect 2025',
+  title: 'AI Resume Architect',
   description: 'AI 驱动的精英简历制作平台',
 };
 

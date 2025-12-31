@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+docs/plans/2025-12-30-ai-resume-builder-design.md
+docs/plans/2025-12-31-ai-logic-review.md
+docs/plans/2025-12-31-template-system-design.md
+docs/plans/image-1.png
+docs/plans/image.png
+docs/plans/todo.md
+.claude/settings.local.json
