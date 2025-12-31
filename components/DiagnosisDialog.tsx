@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useResumeStore } from '../store';
 import { diagnoseResume, fixTextWithSuggestion } from '../aiService';
 import { DiagnosisResult } from '../types';
@@ -21,6 +21,7 @@ const IssueItem: React.FC<IssueItemProps> = ({ issue, resume, updateBlockItemFie
     const [originalContent, setOriginalContent] = useState('');
 
     const canEdit = issue.blockId && issue.itemId && issue.field;
+    // ... (IssueItem logic remains the same)
 
     const handleStartEdit = () => {
         if (!canEdit) return;
@@ -209,6 +210,7 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [result, setResult] = useState<DiagnosisResult | null>(null);
     const [error, setError] = useState<any>(null);
     const [resolvedIssues, setResolvedIssues] = useState<Set<string>>(new Set());
+    const hasRunRef = useRef(false);
 
     const runDiagnosis = async () => {
         setLoading(true);
@@ -225,7 +227,10 @@ const DiagnosisDialog: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     };
 
     useEffect(() => {
-        runDiagnosis();
+        if (!hasRunRef.current) {
+            hasRunRef.current = true;
+            runDiagnosis();
+        }
     }, []);
 
     const handleResolve = (issue: any) => {
