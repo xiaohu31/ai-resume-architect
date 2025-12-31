@@ -1,61 +1,62 @@
 <div align="center">
-  <h1>🚀 AI Resume Architect</h1>
+  <img src="./image/og-image.png" width="200" style="border-radius: 20px; margin-bottom: 20px" />
+  <h1>✨ AI Resume Architect</h1>
 
   <p>
-    <b>隐私优先的 AI 简历构建神器｜集润色、扩展、诊断、导出于一体</b>
+    <b>极致美观 ｜ 集成顶级 AI ｜ 完全免费 ｜ 无需登录 ｜ 在线即用</b>
     <br />
-    <a href="https://ara.yingluowu.com/"><strong>🌐 立即访问：ara.yingluowu.com</strong></a>
+    <a href="https://ara.yingluowu.com/"><strong>🌐 发现你的职业新可能：ara.yingluowu.com</strong></a>
   </p>
 
   <p>
-    <a href="https://github.com/xiaohu31/ai-resume-architect/stargazers"><img src="https://img.shields.io/github/stars/xiaohu31/ai-resume-architect?style=flat-square" alt="stars"></a>
-    <a href="https://github.com/xiaohu31/ai-resume-architect/network/members"><img src="https://img.shields.io/github/forks/xiaohu31/ai-resume-architect?style=flat-square" alt="forks"></a>
-    <a href="https://github.com/xiaohu31/ai-resume-architect/blob/main/LICENSE"><img src="https://img.shields.io/github/license/xiaohu31/ai-resume-architect?style=flat-square" alt="license"></a>
-  </p>
-
-  <p>
-    <b>AI Resume Architect</b> 是一款集成 <b>Gemini 3.0 / 兼容 OpenAI 协议 (DeepSeek 等)</b> 智能驱动的现代化简历构建平台。通过 <b>STAR 法则</b> 深度诊断与字段级 AI 助手，助您快速产出极具专业竞争力的简历。项目坚持 <b>隐私优先</b>，所有数据均存储在本地浏览器，零后端依赖，支持本地离线运行。
-  </p>
-  <p>
-    <a href="https://ara.yingluowu.com/">立即体验 →</a>
+    <a href="https://github.com/xiaohu31/ai-resume-architect/stargazers"><img src="https://img.shields.io/github/stars/xiaohu31/ai-resume-architect?style=for-the-badge&logo=github&color=FFD700" alt="stars"></a>
+    <a href="https://github.com/xiaohu31/ai-resume-architect/network/members"><img src="https://img.shields.io/github/forks/xiaohu31/ai-resume-architect?style=for-the-badge&logo=git&color=white" alt="forks"></a>
+    <a href="https://github.com/xiaohu31/ai-resume-architect/blob/main/LICENSE"><img src="https://img.shields.io/github/license/xiaohu31/ai-resume-architect?style=for-the-badge&logo=opensourceinitiative" alt="license"></a>
   </p>
 </div>
 
 ---
 
+## 💎 为什么选择 AI Resume Architect?
 
-## 🌟 项目简介 (Introduction)
+在求职的过程中，第一印象不仅来自简历内容，更来自视觉呈现。**AI Resume Architect** 旨在为你打造一份**既有灵魂（AI 优化），又有颜值（专业设计）**的完美简历。
 
-**AI Resume Architect** 是一款基于 React 19 和 Vite 6 构建的高性能 Web 应用。它兼具了编辑器的灵活性与 AI 的深度优化能力，旨在解决“简历内容空洞”、“排版困难”和“隐私泄露”三大痛点。
-
-> **GitHub Search Optimized Keywords:** AI Resume Builder, Resume Generator, DeepSeek Resume, Gemini Resume Advisor, Smart Resume Editor, Privacy-First Resume, React PDF Export, STAR Method Resume, Career Assistant, Job Hunting Tool, ATS Resume Optimizer, Resume Diagnosis, Professional Resume Template, Career Growth, Open Source Resume, 简历制作, 简历编写, 简历排版, 个人简历, 求职助手, 在线简历, 简历生成.
+### 🌈 核心优势
+- 🎨 **极致美观**：基于现代审美设计的 UI 界面，玻璃拟态风格，实时渲染 A4 标准布局。
+- 🤖 **顶级 AI 集成**：原生支持 **Gemini 3.0** 与 **DeepSeek**，深度对齐 **STAR 法则**，让每一行描述都掷地有声。
+- � **完全免费**：开源项目，无任何隐藏收费，不割韭菜。
+- 🔓 **无需登录**：打开即用。我们不收集你的邮箱，不索取你的电话，你的隐私由你掌控。
+- ☁️ **在线即用**：支持 Vercel 一键部署，或直接通过浏览器安全访问。数据全本地存储，永不丢件。
 
 ---
 
-## 📸 功能预览 (Feature Preview)
+## 🌟 核心特性 (Core Features)
 
-| 主编辑界面 | AI 简历诊断报告 |
+- 🤖 **AI 深度驱动的工作流**
+  - **智能润色**：利用大模型将平凡的语言转化为专业的职场话术。
+  - **内容扩展**：自动挖掘项目细节，量化工作成果。
+  - **选中即修复**：首创**浮动 AI 工具栏**，鼠标选中文字即可实时进化内容。
+  - **简历诊断**：模拟资深 HR 视角，从四个维度为你的简历评分。
+- 🛡️ **隐私优先架构**
+  - 使用 **IndexedDB (Dexie.js)** 技术，数据物理隔离在你的浏览器中。
+  - 零后端、零 API 泄露风险，项目支持完全离线运行。
+- 🎨 **模块化与自由排版**
+  - **组件化管理**：基于 `@dnd-kit` 的平滑拖拽排序，像拼积木一样写简历。
+  - **样式微调**：字号、行高、间距、字体库（内置阿里惠普体 3.0）均可毫秒级预览。
+- 📸 **专业化管理**
+  - **快照系统**：一键保存 V1.0、V2.0 版本，按需切换。
+  - **高保真 PDF**：完美支持浏览器打印引擎，生成 ATS 友好的高清 PDF。
+
+---
+
+## 📸 视觉预览 (Visual Preview)
+
+| 极简且高级的编辑器 | 深度 AI 诊断报告 |
 | :---: | :---: |
 | ![Editor Interface](./image/image_1.png) | ![Diagnosis Report](./image/image_2.png) |
 
 ---
 
-## ✨ 核心特性
-
-- 🤖 **AI 深度驱动**
-  - **智能润色**：一键提升语义表达，使用更专业的行业术语。
-  - **内容扩展**：挖掘经历细节点，自动对齐 STAR 法则（情境、任务、行动、结果）。
-  - **选中即触发**：支持在编辑器中选中任意文本，即可弹出 **浮动 AI 工具栏**，快速进行润色、扩展，交互更加自然高效。
-  - **智能诊断**：从完整性、量化程度、表达质量等维度对简历进行打分并提供修改建议。
-- 🛡️ **极致隐私保护**
-  - **全本地化存储**：利用 IndexedDB 技术，数据持久化于浏览器中，不上传至任何中心化服务器。
-  - **无后端依赖**：真正零后端架构，保护个人信息不外泄。
-- 📦 **模块化编辑器**
-  - **自由拖拽**：基于 `@dnd-kit` 实现模块间无缝拖拽排序。
-  - **灵活定义**：支持教育背景、工作经历、项目经验、专业技能等预置模块及无限自定义模块。
-- 🎨 **专业级视觉与导出**
-  - **实时预览**：A4 纸比例精准渲染，所见即所得。
-  - **高级样式定制**：动态调整字体大小、行高、页边距、主题间距等。
   - **高清 PDF 导出**：支持通过浏览器打印引擎一键生成标准 PDF。
 - 📸 **版本管理系统**
   - **快照存档**：支持为不同公司或岗位创建专属简历快照（如：阿里版、腾讯版、V1.0）。
