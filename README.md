@@ -1,5 +1,5 @@
 <div align="center">
-  <img src="./image/og-image.png" width="200" style="border-radius: 20px; margin-bottom: 20px" />
+
   <h1>✨ AI Resume Architect</h1>
 
   <p>
@@ -17,6 +17,16 @@
 
 ---
 
+## � 视觉预览 (Visual Preview)
+
+| 极简且高级的编辑器 | 深度 AI 诊断报告 |
+| :---: | :---: |
+| ![Editor Interface](./image/image_1.png) | ![Diagnosis Report](./image/image_2.png) |
+| **智能辅助与排版** | **实时预览与导出** |
+| ![AI Feature](./image/image_3.png) | ![Preview Function](./image/image_4.png) |
+
+---
+
 ## 💎 为什么选择 AI Resume Architect?
 
 在求职的过程中，第一印象不仅来自简历内容，更来自视觉呈现。**AI Resume Architect** 旨在为你打造一份**既有灵魂（AI 优化），又有颜值（专业设计）**的完美简历。
@@ -24,7 +34,7 @@
 ### 🌈 核心优势
 - 🎨 **极致美观**：基于现代审美设计的 UI 界面，玻璃拟态风格，实时渲染 A4 标准布局。
 - 🤖 **顶级 AI 集成**：原生支持 **Gemini 3.0** 与 **DeepSeek**，深度对齐 **STAR 法则**，让每一行描述都掷地有声。
-- � **完全免费**：开源项目，无任何隐藏收费，不割韭菜。
+- 🆓 **完全免费**：开源项目，无任何隐藏收费，不割韭菜。
 - 🔓 **无需登录**：打开即用。我们不收集你的邮箱，不索取你的电话，你的隐私由你掌控。
 - ☁️ **在线即用**：支持 Vercel 一键部署，或直接通过浏览器安全访问。数据全本地存储，永不丢件。
 
@@ -46,21 +56,6 @@
 - 📸 **专业化管理**
   - **快照系统**：一键保存 V1.0、V2.0 版本，按需切换。
   - **高保真 PDF**：完美支持浏览器打印引擎，生成 ATS 友好的高清 PDF。
-
----
-
-## 📸 视觉预览 (Visual Preview)
-
-| 极简且高级的编辑器 | 深度 AI 诊断报告 |
-| :---: | :---: |
-| ![Editor Interface](./image/image_1.png) | ![Diagnosis Report](./image/image_2.png) |
-
----
-
-  - **高清 PDF 导出**：支持通过浏览器打印引擎一键生成标准 PDF。
-- 📸 **版本管理系统**
-  - **快照存档**：支持为不同公司或岗位创建专属简历快照（如：阿里版、腾讯版、V1.0）。
-  - **撤销/重做**：基于 Zundo 的完整操作历史记录。
 
 ---
 
