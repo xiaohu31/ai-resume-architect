@@ -259,7 +259,14 @@ const SortableItem = ({
                     {item.fields.avatar ? (
                       <>
                         <img src={item.fields.avatar} alt="Avatar" className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2">
+                        <div
+                          className="absolute inset-0 z-10 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col items-center justify-center gap-2 cursor-pointer"
+                          onClick={(e) => {
+                            if ((e.target as HTMLElement).tagName !== 'BUTTON') {
+                              e.currentTarget.parentElement?.querySelector<HTMLInputElement>('input[type="file"]')?.click();
+                            }
+                          }}
+                        >
                           <span className="text-xs text-zinc-200 font-bold">更换图片</span>
                           <button
                             onClick={(e) => { e.stopPropagation(); updateBlockItemField(activeBlock.id, item.id, 'avatar', ''); }}
